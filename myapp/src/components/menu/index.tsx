@@ -38,7 +38,7 @@ const MyMenu: ConnectRC<IProps> = props => {
 
   return <div className={styles.wrap}>
     <div className="logo" />
-    <Menu mode="inline" key={JSON.stringify(openKeys)} defaultOpenKeys={openKeys} defaultSelectedKeys={[history.location.pathname]}>{
+    <Menu theme="dark" mode="inline" key={JSON.stringify(openKeys)} defaultOpenKeys={openKeys} defaultSelectedKeys={[history.location.pathname]}>{
       props.menuList.map((item, index) => {
         return <Menu.SubMenu key={item.menuId} icon={React.createElement(subMenuIcons[index])} title={item.name}>{
           item.list.map(value => {

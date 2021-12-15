@@ -1,31 +1,34 @@
 import {  IHotSearch, IRecordsItem } from '@/interfaces';
-import { getSystemNav } from '@/services';
+import { getHotSearch } from '@/services';
 import { getToken } from '@/utils';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
-export interface SysModelState {
-    current: number;
+export interface HotSearchState extends IPage{
     pages: number;
     records: IRecordsItem[];
     searchCount: boolean;
-    size: number;
     total: number;
+}
+
+export interface IPage {
+    current: number;
+    size: number;
 }
 
 // 模块的接口
 export interface HotSearchModelType {
   namespace: 'hotSearch';
-  state: SysModelState;
+  state: HotSearchState;
   effects: {
-    getNavMenu: Effect;
+    hotSearchList: Effect;
+    SearchList: Effect;
   };
   reducers: {
-    save: Reducer<IHotSearch>;
+    save: Reducer<HotSearchState>;
     // 启用 immer 之后
     // save: ImmerReducer<IndexModelState>;
   };
-  subscriptions: { setup: Subscription };
 }
 
 // 模块的定义
@@ -43,25 +46,30 @@ const HotSearchModel: HotSearchModelType = {
 
   // 异步action
   effects: {
-    *getNavMenu({ payload }, { call, put, select}) {
-      /**
-       * 判断获取导航菜单的两个条件
-       * 1. 有登陆态
-       * 2. 没有导航菜单信息
-       **/ 
-      let token = getToken();
-      console.log('token...', token);
+    *hotSearchList({ payload }, { call, put, select}) {
       // 从redux中拿到状态
-      const menuList = yield select(state=>state.sys.menuList);
-
-      if (!menuList.length && token){
-        let result = yield getSystemNav();
+      const state = yield select(state=>state.hotSearch)
+        const obj = {
+            current:state.current,
+            size:state.size
+        }
+        let result = yield getHotSearch(obj);
         yield put({
           type: 'save',
           payload: result
         })
-      }
     },
+    *SearchList({ payload }, { call, put, select}) {
+      // 从redux中拿到状态
+      const state = yield select(state=>state.hotSearch)
+        const obj = {
+            current:state.current,
+            size:state.size
+        }
+        console.log(payload);
+        
+    },
+    
   },
 
   // 同步action
@@ -71,18 +79,6 @@ const HotSearchModel: HotSearchModelType = {
         ...state,
         ...action.payload,
       };
-    },
-  },
-
-  subscriptions: {
-    setup({ dispatch, history }) {
-      return history.listen(({ pathname }) => {
-        if (pathname !== '/login') {
-          dispatch({
-            type: 'getNavMenu',
-          });
-        }
-      });
     },
   },
 };
