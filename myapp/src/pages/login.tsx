@@ -1,19 +1,27 @@
-import React, { Dispatch, useEffect, useState } from 'react';
-import { Form, Input, Button } from 'antd';
+import React, {Dispatch, useEffect, useState} from 'react';
+import bg from '@/assets/img/login-bg.png';
+import { Form, Input, Button, message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './login.less';
 import { ILoginForm } from '@/interfaces';
+<<<<<<< HEAD
 import {  ConnectRC, connect } from 'umi';
 import bg from '@/assets/img/login-bg.png';
 import { login } from '@/services';
+=======
+import { ConnectRC, connect, useHistory } from 'umi';
+>>>>>>> 20bd7cc71bbf67447f55500e5bae8b704b014058
 
 const baseURL = 'http://82.156.36.178:8085';
 interface IProps {
   login: (payload: ILoginForm) => void;
 }
-const LoginPage: ConnectRC<IProps> = (props) => {
-  const [uuid, setUuid] = useState<string>('');
+const LoginPage: ConnectRC<IProps> = (props) => { 
+    // 定义状态
+    const [uuid, setUuid] = useState<string>('');
+    const history = useHistory();
 
+    // 定义生命周期
   useEffect(() => {
     headleUuid();
   }, []);
@@ -23,18 +31,23 @@ const LoginPage: ConnectRC<IProps> = (props) => {
     setUuid(uuid);
   };
 
+    // 事件处理函数
   const onFinish = async (values: Omit<ILoginForm, 't' | 'sessionUUID'>) => {
     const loginForm: ILoginForm = {
       t: +new Date(),
       sessionUUID: uuid,
       ...values,
     };
-    console.log('props...', props);
-    props.login(loginForm);
-    // let result = await login(loginForm);
-    // console.log('result...', result);
+    try{
+      await props.login(loginForm);
+      let redirect = history.location.search.split('=')[1];
+      history.replace(redirect?decodeURIComponent(redirect): '/');
+  }catch(e: any){
+      message.error(e.toString());
+  }
   };
 
+    // render内容
   return (
     <div className={styles.login}>
       <h2>电商运营后台</h2>
