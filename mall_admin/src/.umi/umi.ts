@@ -4,8 +4,8 @@ import '@@/core/devScripts';
 import { plugin } from './core/plugin';
 import './core/pluginRegister';
 import { createHistory } from './core/history';
-import { ApplyPluginsType } from '/Users/MJ/web/project/1903B/Project2/mall_admin/node_modules/umi/node_modules/@umijs/runtime';
-import { renderClient } from '/Users/MJ/web/project/1903B/Project2/mall_admin/node_modules/@umijs/renderer-react';
+import { ApplyPluginsType } from 'C:/Users/86137/Desktop/新建文件夹 (2)/two_gtoups/mall_admin/node_modules/@umijs/runtime';
+import { renderClient } from 'C:/Users/86137/Desktop/新建文件夹 (2)/two_gtoups/mall_admin/node_modules/@umijs/renderer-react';
 import { getRoutes } from './core/routes';
 
 
