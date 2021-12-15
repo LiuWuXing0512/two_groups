@@ -1,5 +1,5 @@
 import { IAuthorityItem, IMenuList } from '@/interfaces';
-import { getSystemNav } from '@/services';
+import { getSystemNav , getAreaList } from '@/services';
 import { getToken } from '@/utils';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
@@ -42,7 +42,6 @@ const SysModel: SysModelType = {
        * 2. 没有导航菜单信息
        **/ 
       let token = getToken();
-      console.log('token...', token);
       // 从redux中拿到状态
       const menuList = yield select(state=>state.sys.menuList);
 
