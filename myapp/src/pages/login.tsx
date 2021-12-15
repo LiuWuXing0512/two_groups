@@ -3,7 +3,7 @@ import { Form, Input, Button } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './login.less';
 import { ILoginForm } from '@/interfaces';
-import { IndexModelState, ConnectRC, Loading, connect } from 'umi';
+import { ConnectRC, Loading, connect } from 'umi';
 import bg from '@/assets/img/login-bg.png';
 import { login } from '@/services';
 
