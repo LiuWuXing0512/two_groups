@@ -1,27 +1,27 @@
-
-
 export interface IMemberList {
-    birthDate: null
-    loginPassword: null
-    modifyTime: string
-    nickName: string
-    payPassword: null
-    pic: string
-    realName: null
-    score: null
-    sex: string
-    status: number
-    userId: string
-    userLastip: null
-    userLasttime: null
-    userMail: null
-    userMemo: null
-    userMobile: null
-    userRegip: null
-    userRegtime: string
+    userId: string;
+    nickName: string;
+    realName?: any;
+    userMail?: any;
+    loginPassword?: any;
+    payPassword?: any;
+    userMobile?: any;
+    modifyTime: string;
+    userRegtime: string;
+    userRegip?: any;
+    userLasttime?: any;
+    userLastip?: any;
+    userMemo?: any;
+    sex: string;
+    birthDate?: any;
+    pic: string;
+    status: number;
+    score?: any;
 }
 
 export interface IMemberData {
     current:number,
-    size:number
+    size:number,
+    nickName?:string,
+    status?:string
 }

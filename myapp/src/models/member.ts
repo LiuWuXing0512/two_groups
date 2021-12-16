@@ -3,7 +3,9 @@ import { getMemberList } from '@/services'
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 export interface MemberState {
-    records: IMemberList[]
+    records: IMemberList[],
+    pages: number,
+    total:number
 }
 // 模块的接口
 export interface MemberType {
@@ -25,14 +27,23 @@ const MemberModel: MemberType = {
 
     state: {
         records: [],
+        pages:0,
+        total:0
     },
 
     // 异步action
     effects: {
-        *getMemberList({current=1,size=10},{call,put}){
-            let result=yield getMemberList({current,size})
-            console.log(result,'result,.......');
+        *getMemberList({payload},{call,put}){
+            console.log(payload,'参数。。。。。。。。。。');
             
+            let result=yield getMemberList(payload)
+            console.log(result,'result,.......');
+            if(result.records.length){
+                yield put({
+                    type: 'save',
+                    payload: result
+                })
+            }
         }
     },
 
