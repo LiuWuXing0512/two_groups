@@ -5,7 +5,6 @@ import {
   posthotSearchSum,
   puthotSearchSum,
 } from '@/services';
-import { getToken } from '@/utils';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
