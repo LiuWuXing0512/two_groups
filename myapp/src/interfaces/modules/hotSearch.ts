@@ -15,4 +15,5 @@ export interface IRecordsItem {
   shopId: number;
   status: number;
   title: string;
+  check?: boolean;
 }

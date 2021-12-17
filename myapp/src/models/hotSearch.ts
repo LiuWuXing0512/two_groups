@@ -23,6 +23,7 @@ export interface HotSearchModelType {
   effects: {
     hotSearchList: Effect;
     SearchList: Effect;
+    hotSearchChange: Effect;
   };
   reducers: {
     save: Reducer<HotSearchState>;
@@ -36,18 +37,18 @@ const HotSearchModel: HotSearchModelType = {
   namespace: 'hotSearch',
 
   state: {
-    current: 1,
+    current: 1,//当前下标
     pages: 1,
     records: [],
     searchCount: false,
-    size: 10,
-    total: 0,
+    size: 10,//一页多少个
+    total: 0,//共多少条
   },
 
   // 异步action
   effects: {
     *hotSearchList({ payload }, { call, put, select}) {
-      // 从redux中拿到状态
+      // 从dva中拿到状态
       const state = yield select(state=>state.hotSearch)
         const obj = {
             current:state.current,
@@ -60,7 +61,7 @@ const HotSearchModel: HotSearchModelType = {
         })
     },
     *SearchList({ payload }, { call, put, select}) {
-      // 从redux中拿到状态
+      // 从dva中拿到状态
       const state = yield select(state=>state.hotSearch)
         const obj = {
             current:state.current,
@@ -69,6 +70,10 @@ const HotSearchModel: HotSearchModelType = {
         console.log(payload);
         
     },
+    *hotSearchChange({ payload }, { call, put, select}){
+      console.log(payload,'payload...74');
+      
+    }
     
   },
 

@@ -1,61 +1,132 @@
 import { HotSearchState } from '@/models/hotSearch';
 import React, { Dispatch, useEffect, useState } from 'react';
 import { ConnectRC, connect } from 'umi';
-import { Button, Pagination,Tooltip, Descriptions } from 'antd';
+import { Button, Pagination, Table, Tooltip } from 'antd';
 import HotSearchHeader from '@/components/hotSearch/HotSearchHeader';
+import {
+  SyncOutlined,
+  AppstoreOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
+import styles from './hotSearch.less';
+import { IRecordsItem } from '@/interfaces';
 
-interface IProps {
+interface IProps extends HotSearchState {
   hotSearchList: () => void;
 }
 
 const HotSearch: ConnectRC<IProps> = (props) => {
+  const [Disabled, setDisabled] = useState<boolean>(true);
+
+  const [flag, setFlag] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const columns = [
+    {
+      title: 'title',
+      dataIndex: 'title',
+    },
+    {
+      title: 'content',
+      dataIndex: 'content',
+    },
+    {
+      title: 'recDate',
+      dataIndex: 'recDate',
+    },
+    {
+      title: 'status' ? '启用' : '未启用',
+      dataIndex: 'status',
+      render:(text)=>{
+        return <span className={text?'start':'noStart'}>{text?  '启用' : '未启用'}</span>
+      }
+    },
+    {
+      title: 'seq',
+      dataIndex: 'seq',
+    },
+    {
+      title: '操作',
+      render: (record) => {
+        return (
+          <div key={record.hotSearchId}>
+            <Button  type="primary" onClick={() => headleSum(record)}>删除</Button>
+            <Button type="primary" danger>
+              编辑
+            </Button>
+          </div>
+        );
+      },
+    },
+  ];
   useEffect(() => {
     props.hotSearchList();
   }, []);
 
-  return (
-    <div className="hotSearch">
-      <HotSearchHeader />
+  function onChange(pageNumber) {
+    console.log('Page: ', pageNumber);
+  }
+
+  const headleSum = (item) => {
+    console.log('shanc', item);
+  };
+  const onChangeCheck =  (selectedRowKeys: React.Key[], selectedRows: IRecordsItem[]) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  }
+
+  return <div className="hotSearch">
+      <HotSearchHeader flag={flag} />
       <div className="main">
-        <div className="mainTop">
+        <div className={styles.mainTop}>
           <div className="topLeft">
             <Button type="primary">+新增</Button>
-            <Button type="primary" danger disabled>
+            <Button type="primary" danger disabled={Disabled}>
               批量删除
             </Button>
           </div>
-          <div className="topRight">
-          <Tooltip placement="top" title={text}>
-        <Button>Top</Button>
-      </Tooltip>
+          <div className={styles.topRight}>
+            <Tooltip placement="top" title="刷新">
+              <Button>
+                <SyncOutlined />
+              </Button>
+            </Tooltip>
+            <Tooltip placement="top" title="显隐">
+              <Button>
+                <AppstoreOutlined />
+              </Button>
+            </Tooltip>
+            <Tooltip placement="top" title="搜索">
+              <Button>
+                <SearchOutlined onClick={() => setFlag(!flag)} />
+              </Button>
+            </Tooltip>
           </div>
         </div>
       </div>
       <div className="bottom">
-        <Descriptions
-          title="Responsive Descriptions"
-          bordered
-          column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
-        >
-          <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-          <Descriptions.Item label="Billing">Prepaid</Descriptions.Item>
-          <Descriptions.Item label="time">18:00:00</Descriptions.Item>
-          <Descriptions.Item label="Amount">$80.00</Descriptions.Item>
-          <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-          <Descriptions.Item label="Official">$60.00</Descriptions.Item>
-          <Descriptions.Item label="Config Info">
-            Data disk type: MongoDB
-          </Descriptions.Item>
-        </Descriptions>
-        <Pagination defaultCurrent={6} total={500} />
+        <Table
+          rowSelection={{
+            type: 'checkbox',
+            onChange: onChangeCheck,
+          }}
+          loading={loading}
+          columns={columns}
+          dataSource={props.records}
+        />
+        <Pagination
+          showQuickJumper
+          defaultCurrent={2}
+          showSizeChanger={true}
+          total={10}
+          onChange={onChange}
+        />
       </div>
     </div>
-  );
 };
 
 const mapStateToProps = ({ hotSearch }: { hotSearch: HotSearchState }) => {
   return {
-    hotSearch,
+    ...hotSearch,
   };
 };
 

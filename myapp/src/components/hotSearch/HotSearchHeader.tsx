@@ -2,27 +2,30 @@ import { HotSearchState } from '@/models/hotSearch';
 import React, { Dispatch, useEffect, useState } from 'react';
 import { ConnectRC, connect } from 'umi';
 import { Form, Input, Button, Select } from 'antd';
+import './hotSearchHeader.less'
 const { Option } = Select;
 
 interface IProps {
     SearchList: (payload:IFrom) => void;
+    flag:boolean;
 }
 
 const HotSearchHeader: ConnectRC<IProps> = (props) => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
-    console.log(values);
+  const onFinish = (values: IFrom) => {
+    props.SearchList(values)
   };
 
   const onReset = () => {
     form.resetFields();
   };
 
-  //   console.log('props...', props);
+    console.log('props...', props);
   return (
     <div className="hotSearchHeader">
-      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+      {
+        props.flag? <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
         <Form.Item name="title" label="热搜标题">
           <Input placeholder="热搜标题" />
         </Form.Item>
@@ -61,17 +64,18 @@ const HotSearchHeader: ConnectRC<IProps> = (props) => {
             清空
           </Button>
         </Form.Item>
-      </Form>
+      </Form>:null
+      }
     </div>
   );
 };
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 10 },
+  wrapperCol: { span: 24  },
 };
 const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
+  wrapperCol: { offset: 10, span: 10 },
 };
 
 export interface IFrom {
