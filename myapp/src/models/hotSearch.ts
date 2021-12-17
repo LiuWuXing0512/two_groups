@@ -50,7 +50,6 @@ const HotSearchModel: HotSearchModelType = {
        * 2. 没有导航菜单信息
        **/ 
       let token = getToken();
-      console.log('token...', token);
       // 从redux中拿到状态
       const menuList = yield select(state=>state.sys.menuList);
 

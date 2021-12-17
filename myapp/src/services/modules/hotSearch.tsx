@@ -1,9 +1,8 @@
 import { request } from 'umi';
 
-export function getHotSearch(params){
+export function getHotSearch(){
     return request('/proxyApi/admin/hotSearch',{
         method: 'GET',
-
     })
 }
 
