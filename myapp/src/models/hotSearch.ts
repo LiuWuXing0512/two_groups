@@ -1,23 +1,27 @@
-import { IAuthorityItem, IMenuList } from '@/interfaces';
-import { getSystemNav , getAreaList } from '@/services';
+import {  IHotSearch, IRecordsItem } from '@/interfaces';
+import { getSystemNav } from '@/services';
 import { getToken } from '@/utils';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
 export interface SysModelState {
-  menuList: IMenuList[];
-  authorities: IAuthorityItem[];
+    current: number;
+    pages: number;
+    records: IRecordsItem[];
+    searchCount: boolean;
+    size: number;
+    total: number;
 }
 
 // 模块的接口
-export interface SysModelType {
-  namespace: 'sys';
+export interface HotSearchModelType {
+  namespace: 'hotSearch';
   state: SysModelState;
   effects: {
     getNavMenu: Effect;
   };
   reducers: {
-    save: Reducer<SysModelState>;
+    save: Reducer<IHotSearch>;
     // 启用 immer 之后
     // save: ImmerReducer<IndexModelState>;
   };
@@ -25,12 +29,16 @@ export interface SysModelType {
 }
 
 // 模块的定义
-const SysModel: SysModelType = {
-  namespace: 'sys',
+const HotSearchModel: HotSearchModelType = {
+  namespace: 'hotSearch',
 
   state: {
-    menuList: [],
-    authorities: []
+    current: 1,
+    pages: 1,
+    records: [],
+    searchCount: false,
+    size: 10,
+    total: 0,
   },
 
   // 异步action
@@ -42,6 +50,7 @@ const SysModel: SysModelType = {
        * 2. 没有导航菜单信息
        **/ 
       let token = getToken();
+      console.log('token...', token);
       // 从redux中拿到状态
       const menuList = yield select(state=>state.sys.menuList);
 
@@ -78,4 +87,4 @@ const SysModel: SysModelType = {
   },
 };
 
-export default SysModel;
+export default HotSearchModel;
