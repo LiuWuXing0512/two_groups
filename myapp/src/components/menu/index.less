@@ -6,5 +6,18 @@
 :global{
     .ant-menu.ant-menu-root{
         flex: 1;
+        .ant-menu-submenu.ant-menu-submenu-inline{
+            display: flex;
+            justify-content: center;
+            align-items: center;   
+            flex-direction: column;
+            .ant-menu-submenu-title{
+             height: 50px;
+             line-height: 50px;
+         }
+         .ant-menu-item{
+             height: 50px;
+         }
+        }
     }
 }

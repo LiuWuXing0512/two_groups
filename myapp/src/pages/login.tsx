@@ -1,4 +1,4 @@
-import React, {Dispatch, useEffect, useState} from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import bg from '@/assets/img/login-bg.png';
 import { Form, Input, Button, message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,12 +10,12 @@ const baseURL = 'http://82.156.36.178:8085';
 interface IProps {
   login: (payload: ILoginForm) => void;
 }
-const LoginPage: ConnectRC<IProps> = (props) => { 
-    // 定义状态
-    const [uuid, setUuid] = useState<string>('');
-    const history = useHistory();
+const LoginPage: ConnectRC<IProps> = (props) => {
+  // 定义状态
+  const [uuid, setUuid] = useState<string>('');
+  const history = useHistory();
 
-    // 定义生命周期
+  // 定义生命周期
   useEffect(() => {
     headleUuid();
   }, []);
@@ -25,23 +25,23 @@ const LoginPage: ConnectRC<IProps> = (props) => {
     setUuid(uuid);
   };
 
-    // 事件处理函数
+  // 事件处理函数
   const onFinish = async (values: Omit<ILoginForm, 't' | 'sessionUUID'>) => {
     const loginForm: ILoginForm = {
       t: +new Date(),
       sessionUUID: uuid,
       ...values,
     };
-    try{
+    try {
       await props.login(loginForm);
       let redirect = history.location.search.split('=')[1];
-      history.replace(redirect?decodeURIComponent(redirect): '/');
-  }catch(e: any){
+      history.replace(redirect ? decodeURIComponent(redirect) : '/');
+    } catch (e: any) {
       message.error(e.toString());
-  }
+    }
   };
 
-    // render内容
+  // render内容
   return (
     <div className={styles.login}>
       <h2>电商运营后台</h2>
@@ -57,6 +57,7 @@ const LoginPage: ConnectRC<IProps> = (props) => {
       >
         <Form.Item
           name="principal"
+          className={styles.ant_row_user_pwd}
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input placeholder="账号" />
@@ -64,6 +65,7 @@ const LoginPage: ConnectRC<IProps> = (props) => {
 
         <Form.Item
           name="credentials"
+          className={styles.ant_row_user_pwd}
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password placeholder="密码" />
@@ -92,7 +94,6 @@ const LoginPage: ConnectRC<IProps> = (props) => {
 };
 
 const mapStateToProps = (state: any) => {
-  console.log('state...', state);
   return {};
 };
 

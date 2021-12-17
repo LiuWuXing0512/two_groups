@@ -5,7 +5,6 @@ interface IProps{
     loading: boolean;
 }
 const GlobalLoading: ConnectRC<IProps> = props=>{
-    console.log(props.loading);
     
     if (props.loading){
         return <Spin className="loading" size="large"/>
