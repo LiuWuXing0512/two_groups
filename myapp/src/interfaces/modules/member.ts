@@ -25,3 +25,10 @@ export interface IMemberData {
     nickName?:string,
     status?:string
 }
+
+export interface IChangeStatus {
+    nickName:string,
+    status:number,
+    t:number,
+    userId:string
+}
