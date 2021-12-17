@@ -57,6 +57,7 @@ const LoginPage: ConnectRC<IProps> = (props) => {
       >
         <Form.Item
           name="principal"
+          className={styles.ant_row_user_pwd}
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input placeholder="账号" />
@@ -64,6 +65,7 @@ const LoginPage: ConnectRC<IProps> = (props) => {
 
         <Form.Item
           name="credentials"
+          className={styles.ant_row_user_pwd}
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password placeholder="密码" />

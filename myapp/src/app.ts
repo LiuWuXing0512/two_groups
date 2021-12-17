@@ -1,7 +1,7 @@
 import React from 'react';
 import { RequestConfig, history } from 'umi';
 import { message } from 'antd';
-// import { createLogger } from 'redux-logger';
+import { createLogger } from 'redux-logger';
 // 全局loading
 import Loading from '@/components/loading'
 import { getToken } from './utils';

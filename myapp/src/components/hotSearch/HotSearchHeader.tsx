@@ -6,7 +6,7 @@ import './hotSearchHeader.less'
 const { Option } = Select;
 
 interface IProps {
-    SearchList: (payload:IFrom) => void;
+    hotSearchList: (payload:IFrom) => void;
     flag:boolean;
 }
 
@@ -14,7 +14,7 @@ const HotSearchHeader: ConnectRC<IProps> = (props) => {
   const [form] = Form.useForm();
 
   const onFinish = (values: IFrom) => {
-    props.SearchList(values)
+    props.hotSearchList(values)
   };
 
   const onReset = () => {
@@ -86,15 +86,15 @@ export interface IFrom {
 
 const mapStateToProps = ({ hotSearch }: { hotSearch: HotSearchState }) => {
   return {
-    hotSearch,
+    ...hotSearch,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    SearchList: (payload:IFrom) =>
+    hotSearchList: (payload:IFrom) =>
       dispatch({
-        type: 'hotSearch/SearchList',
+        type: 'hotSearch/hotSearchList',
         payload,
       }),
   };
