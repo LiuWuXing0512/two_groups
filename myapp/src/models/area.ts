@@ -1,7 +1,8 @@
 import { getAreaList } from '@/services';
-
-let list;
-const addressFilter = (addressList, parentId) => {
+import { IaddressList , Istate} from '@/interfaces';
+import { Effect,  Reducer } from 'umi';
+let list:Array<IaddressList> = [];
+const addressFilter = (addressList:IaddressList, parentId:number) => {
   if (parentId === 0) {
     list = addressList.filter(item => item.parentId === parentId)
     list.map(item => Object.defineProperty(item, 'children', { value: addressFilter(addressList, item.areaId), writable: true }));
@@ -15,8 +16,25 @@ const addressFilter = (addressList, parentId) => {
     return addressList.filter(item => item.parentId === parentId)
   }
 }
+
+
+export interface AreaModelType {
+  namespace: 'area';
+  state: Istate;
+  effects: {
+    addressList: Effect;
+  };
+  reducers: {
+    setAreaList: Reducer;
+    // 启用 immer 之后
+    // save: ImmerReducer<IndexModelState>;
+  };
+}
+
+
+
 // 模块的定义
-const AreaModel = {
+const AreaModel:AreaModelType = {
   namespace: 'area',
 
   state: {
@@ -25,7 +43,7 @@ const AreaModel = {
 
   // 异步action
   effects: {
-    *addressList({ payload, callback }, { put, call }) {
+    *addressList({ payload }, { put }) {
       let result = yield getAreaList(payload)
       yield put({
         type: 'setAreaList',
@@ -42,10 +60,6 @@ const AreaModel = {
         areaList: action.payload
       }
     }
-  },
-
-  subscriptions: {
-
   },
 };
 

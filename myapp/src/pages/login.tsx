@@ -1,5 +1,4 @@
 import React, { Dispatch, useEffect, useState } from 'react';
-import bg from '@/assets/img/login-bg.png';
 import { Form, Input, Button, message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './login.less';
