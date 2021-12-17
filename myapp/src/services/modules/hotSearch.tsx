@@ -7,5 +7,3 @@ export function getHotSearch(params:IPage){
         params
     })
 }
-
-// /proxyApi/admin/hotSearch

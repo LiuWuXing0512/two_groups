@@ -44,7 +44,7 @@ const UserModel: UserModelType = {
           payload: result
         })
     },
-  },
+  }, 
 
   // 同步action
   reducers: {

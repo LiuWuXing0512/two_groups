@@ -37,9 +37,13 @@ const HotSearch: ConnectRC<IProps> = (props) => {
     {
       title: 'status' ? '启用' : '未启用',
       dataIndex: 'status',
-      render:(text)=>{
-        return <span className={text?'start':'noStart'}>{text?  '启用' : '未启用'}</span>
-      }
+      render: (text) => {
+        return (
+          <span className={text ? 'start' : 'noStart'}>
+            {text ? '启用' : '未启用'}
+          </span>
+        );
+      },
     },
     {
       title: 'seq',
@@ -50,7 +54,9 @@ const HotSearch: ConnectRC<IProps> = (props) => {
       render: (record) => {
         return (
           <div key={record.hotSearchId}>
-            <Button  type="primary" onClick={() => headleSum(record)}>删除</Button>
+            <Button type="primary" onClick={() => headleSum(record)}>
+              删除
+            </Button>
             <Button type="primary" danger>
               编辑
             </Button>
@@ -70,11 +76,19 @@ const HotSearch: ConnectRC<IProps> = (props) => {
   const headleSum = (item) => {
     console.log('shanc', item);
   };
-  const onChangeCheck =  (selectedRowKeys: React.Key[], selectedRows: IRecordsItem[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  }
+  const onChangeCheck = (
+    selectedRowKeys: React.Key[],
+    selectedRows: IRecordsItem[],
+  ) => {
+    console.log(
+      `selectedRowKeys: ${selectedRowKeys}`,
+      'selectedRows: ',
+      selectedRows,
+    );
+  };
 
-  return <div className="hotSearch">
+  return (
+    <div className="hotSearch">
       <HotSearchHeader flag={flag} />
       <div className="main">
         <div className={styles.mainTop}>
@@ -85,9 +99,14 @@ const HotSearch: ConnectRC<IProps> = (props) => {
             </Button>
           </div>
           <div className={styles.topRight}>
-            <Tooltip placement="top" title="刷新">
-              <Button>
-                <SyncOutlined />
+            <Tooltip placement="top" title="刷新" >
+              <Button onClick={() => {
+                    setLoading(true);
+                    setTimeout(() => {
+                      setLoading(false);
+                    }, 1000);
+                  }}>
+                <SyncOutlined/>
               </Button>
             </Tooltip>
             <Tooltip placement="top" title="显隐">
@@ -96,8 +115,8 @@ const HotSearch: ConnectRC<IProps> = (props) => {
               </Button>
             </Tooltip>
             <Tooltip placement="top" title="搜索">
-              <Button>
-                <SearchOutlined onClick={() => setFlag(!flag)} />
+              <Button onClick={() => setFlag(!flag)} >
+                <SearchOutlined/>
               </Button>
             </Tooltip>
           </div>
@@ -122,6 +141,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
         />
       </div>
     </div>
+  );
 };
 
 const mapStateToProps = ({ hotSearch }: { hotSearch: HotSearchState }) => {

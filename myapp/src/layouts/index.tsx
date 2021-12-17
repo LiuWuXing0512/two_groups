@@ -15,7 +15,6 @@ const { Header, Sider, Content } = Layout;
 const blackList = ['/login', '/403', '/404'];
 export default function GloablLayout({ children, location, route, history, match }: IRouteComponentProps) {
   const [collapsed, setCollapsed] = useState<boolean>(false);
-  console.log('location...', location);
 
   if (blackList.indexOf(location.pathname) !== -1) {
     return children
