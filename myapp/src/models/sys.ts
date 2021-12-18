@@ -46,7 +46,8 @@ const SysModel: SysModelType = {
       const menuList = yield select(state=>state.sys.menuList);
 
       if (!menuList.length && token){
-        let result = yield getSystemNav();
+        let result = yield getSystemNav();  
+        
         yield put({
           type: 'save',
           payload: result

@@ -77,7 +77,7 @@ const prodTag: ConnectRC<IProps> = (props) => {
         {
             title: '操作',
             align: 'center' as 'center',
-            render: text => (
+            render: () => (
                 <>
                     <Button type="primary" onClick={edit} style={{ marginRight: 8 + 'px' }}> <EditOutlined /> 修改</Button>
                     <Button type="primary" onClick={del} danger> <DeleteOutlined /> 删除</Button>
@@ -109,7 +109,7 @@ const prodTag: ConnectRC<IProps> = (props) => {
     const [current,setchange ] = useState<number>(1);
     const [size, setchanges] = useState<number>(10);
 
-    function onShowSizeChange(current, pageSize) {
+    function onShowSizeChange(current:number, pageSize:number) {
         console.log(current, pageSize);
       
         // 定义的方法，当这个方法改变的时候，重新赋值
