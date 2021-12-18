@@ -21,6 +21,8 @@ const UserPage: ConnectRC<IProps>=(props)=>{
     const [nickName,changenickName]=useState<string>('')
     const [current]=useState<number>(1)
     const [size]=useState<number>(10)
+    const [value, setValue] = React.useState(1);
+
     const onFinish = (values: any) => {
         let nickName=values.nickName
         changenickName(nickName);
@@ -37,10 +39,11 @@ const UserPage: ConnectRC<IProps>=(props)=>{
         let status=value
         changestatus(status);
     }
-    const edit=(userId)=>{
-        props.getModal(userId)
+    const edit=async (userId)=>{
+        await props.getModal(userId)
+        setValue(modalObj.status)
         setIsModalVisible(true);
-        console.log(userId);
+        // console.log(userId);
     }
     const changepage=(current)=>{
         let payload={current,size,nickName,status}
@@ -48,19 +51,24 @@ const UserPage: ConnectRC<IProps>=(props)=>{
     }
     const [isModalVisible, setIsModalVisible] = useState(false);
     const handleOk = () => {
-        
+        let payloads={
+            nickName:modalObj.nickName,
+            status:value,
+            t:+new Date,
+            userId:modalObj.userId,
+        }
+        props.changeStatus(payloads)
         setIsModalVisible(false);
+        let payload={current,size,nickName,status}
+        props.getMemberList(payload)
     };
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const [value, setValue] = React.useState(1);
 
     const onChange = e => {
         console.log('radio checked', e.target.value);
-        console.log(modalObj.status,e.target.value);
-        
-        // modalObj.status = e.target.value
+        setValue(e.target.value)
     };
     const columns = [
         {
@@ -75,7 +83,7 @@ const UserPage: ConnectRC<IProps>=(props)=>{
         {
           title: '状态',
           dataIndex: 'status',
-          render: (text: number) => <a>{text?'正常' : '禁用'}</a>,
+          render: (text: number) => <span>{text?'正常' : '禁用'}</span>,
         },
         {
           title: '注册时间',
@@ -157,7 +165,7 @@ const UserPage: ConnectRC<IProps>=(props)=>{
                     </Form.Item>
                     <div>
                         <span>状态：</span>
-                        <Radio.Group onChange={onChange} value={modalObj.status}>
+                        <Radio.Group onChange={onChange} value={value}>
                             <Radio value={0}>禁用</Radio>
                             <Radio value={1}>正常</Radio>
                         </Radio.Group>
@@ -190,7 +198,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
             }),
         changeStatus:(payload:IChangeStatus)=>
             dispatch({
-                type: 'member/getModal',
+                type: 'member/changeStatus',
                 payload,
             }),
     };
