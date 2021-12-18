@@ -39,7 +39,8 @@ const SpecModel: SpecModelType = {
       if (!specObj.length) {
         yield put({
           type: 'SpecData',
-          payload:{ RootObject:result},
+          payload:result
+          // payload:{ RootObject:result},
         });
       }
     },
@@ -56,18 +57,6 @@ const SpecModel: SpecModelType = {
       };
     },
   },
-
-  // subscriptions: {
-  //   setup({ dispatch, history }) {
-  //     return history.listen(({ pathname }) => {
-  //       if (pathname !== '/login') {
-  //         dispatch({
-  //           type: 'getSpec',
-  //         });
-  //       }
-  //     });
-  //   },
-  // },
 };
 
 export default SpecModel;

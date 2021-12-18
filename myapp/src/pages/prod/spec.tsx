@@ -1,5 +1,5 @@
 import React, { Dispatch, useEffect, useState } from 'react';
-import { Tooltip, Input, Button, Pagination } from 'antd';
+import { Tooltip, Input, Button, Pagination, Table, Tag, Space } from 'antd';
 import {
   SearchOutlined,
   DeleteOutlined,
@@ -10,7 +10,6 @@ import {
 import { ISpec, RootObject, Record, ProdPropValue } from '@/interfaces';
 import { ConnectRC, connect, useHistory } from 'umi';
 import styles from './spec.less';
-import { Table, Tag, Space } from 'antd';
 const { Column, ColumnGroup } = Table;
 
 interface IProps {
@@ -28,13 +27,10 @@ const SpecPage: ConnectRC<IProps> = (props) => {
   // 定义生命周期
   useEffect(() => {
     let payload = { current: 1, size: 10, propName: '' };
-    console.log(payload);
     props.getSpec(payload);
   }, []);
 
-  useEffect(() => {
-    
-  });
+  useEffect(() => {});
 
   const searchs = (val) => {
     let value = val;
@@ -75,7 +71,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
             icon={<DeleteOutlined />}
             size="large"
           >
-            删除
+            清空
           </Button>
         </div>
       </div>
@@ -122,7 +118,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
             title="操作"
             dataIndex="address"
             key="address"
-            render={(propId:number) => (
+            render={(propId: number) => (
               <div>
                 <Button>删除</Button>
                 <Button>编辑</Button>
@@ -145,7 +141,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
 const mapStateToProps = (state: any) => {
   console.log('state...', state);
   return {
-    records: state.spec.RootObject,
+    records: state.spec.records,
   };
 };
 
@@ -160,10 +156,3 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpecPage);
-function search(): void {
-  throw new Error('Function not implemented.');
-}
-
-function suo(): void {
-  throw new Error('Function not implemented.');
-}
