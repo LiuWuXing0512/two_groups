@@ -6,3 +6,10 @@ export function getSystemNav(){
         method: "GET"
     });
 }
+
+// 获取编辑内容
+export function getmodal(){
+    return request('/sys/menu/nav', {
+        method: "GET"
+    });
+}

@@ -81,7 +81,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
       title: '操作',
       render: (record: { hotSearchId: React.Key | null | undefined }) => {
         return (
-          <div key={record.hotSearchId}>
+          <div>
             <Button type="primary" onClick={() => headleEdit(record)}>
               <EditOutlined />
               编辑
