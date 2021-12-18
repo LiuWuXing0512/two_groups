@@ -9,19 +9,10 @@ const baseURL = 'http://82.156.36.178:8085';
 interface IProps {
   login: (payload: ILoginForm) => void;
 }
-<<<<<<< HEAD
 const LoginPage: ConnectRC<IProps> = (props) => {
   // 定义状态
   const [uuid, setUuid] = useState<string>('');
   const history = useHistory();
-=======
-const LoginPage: ConnectRC<IProps> = (props) => { 
-  console.log(props,);
-  
-    // 定义状态
-    const [uuid, setUuid] = useState<string>('');
-    const history = useHistory();
->>>>>>> b9a5aa4da4120809524eec6be7968b1cdd3797ec
 
   // 定义生命周期
   useEffect(() => {
