@@ -1,12 +1,3 @@
-// export  interface Iprod {
-//   records: Record[];
-//   total: number;
-//   size: number;
-//   current: number;
-//   searchCount: boolean;
-//   pages: number;
-// }
-
 export  interface Iprod {
   size: number;
   current: number;
@@ -27,3 +18,15 @@ export interface Record {
   updateTime: string;
   deleteTime?: any;
 }
+
+export interface Iaddprod{
+  id: number
+  isDefault?: null 
+  prodCount?: null
+  seq?: string
+  shopId?: null
+  status:Boolean
+  style: Boolean
+  title: string
+}
+

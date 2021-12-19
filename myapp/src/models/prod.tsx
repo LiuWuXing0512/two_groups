@@ -1,5 +1,5 @@
 import { Record } from '@/interfaces'
-import { getProd } from '@/services';
+import { getProd,addProd } from '@/services';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
@@ -15,6 +15,7 @@ export interface ProdModelType {
     state: ProdModelState;
     effects: {
         getprod: Effect;
+        addProd:Effect
     };
     reducers: {
         save: Reducer<ProdModelState>;
@@ -55,6 +56,10 @@ const ProdModel: ProdModelType = {
             
 
         },
+        *addProd({payload},{call,put,select}){
+            console.log(payload,'addddddddddddddddddddddddddddddda');
+            
+        }
     },
 
     // 同步action
