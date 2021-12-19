@@ -1,10 +1,11 @@
-import { ISpec ,RootObject} from '@/interfaces';
-import { getSpec } from '@/services';
+import { ISpec ,RootObj} from '@/interfaces';
+import { getSpec,getSpecDel} from '@/services';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
 export interface SpecState {
-  RootObject:RootObject,
+  RootObject:RootObj,
+  num:number
 }
 
 // 模块的接口
@@ -13,6 +14,7 @@ export interface SpecModelType {
   state: SpecState;
   effects: {
     getSpec: Effect;
+    getSpecDel: Effect;
   };
   reducers: {
     SpecData: Reducer<ISpec>;
@@ -26,16 +28,17 @@ const SpecModel: SpecModelType = {
   namespace: 'spec',
 
   state: {
-    RootObject:{} as RootObject,
+    RootObject:{} as RootObj,
+    num:0,
   },
 
   // 异步action
   effects: {
-    *getSpec({ payload }, { put, call, select }) {
+    *getSpec({ payload}, { put, call, select }) {
       console.log(payload, 'specpayload...');
       let result = yield getSpec(payload);
       // 从redux中拿到状态
-      const specObj = yield select((state) => state.spec.RootObject);
+      const specObj = yield select((state: { spec: { RootObject: any; }; }) => state.spec.RootObject);
       if (!specObj.length) {
         yield put({
           type: 'SpecData',
@@ -44,13 +47,16 @@ const SpecModel: SpecModelType = {
         });
       }
     },
+    *getSpecDel({ payload }, { call, put, select }){
+      console.log(payload);
+      let result=yield getSpecDel(payload);
+      console.log(result);
+    }
   },
 
   // 同步action
   reducers: {
     SpecData(state, action) {
-      console.log(action.payload,'52...spec');
-      
       return {
         ...state,
         ...action.payload,
