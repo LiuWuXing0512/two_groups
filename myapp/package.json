@@ -20,6 +20,7 @@
     ]
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-layout": "^6.5.0",
     "@types/redux-logger": "^3.0.9",
     "@types/uuid": "^8.3.3",
