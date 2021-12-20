@@ -15,6 +15,7 @@ export  interface Iprod {
 }
 
 export interface Record {
+  propId(propId: any): void;
   id: number;
   title: string;
   shopId: number;
