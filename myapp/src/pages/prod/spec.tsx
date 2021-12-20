@@ -1,5 +1,5 @@
 import React, { Dispatch, useEffect, useState } from 'react';
-import { Tooltip, Input, Button, Pagination, Table, Tag } from 'antd';
+import { Tooltip, message, Input, Button, Pagination, Table, Tag } from 'antd';
 import {
   SearchOutlined,
   DeleteOutlined,
@@ -11,7 +11,7 @@ import { ISpec, IDel, Records, ProdPropValues } from '@/interfaces';
 import { ConnectRC, connect, useHistory } from 'umi';
 import styles from './spec.less';
 const { Column, ColumnGroup } = Table;
-import ModalModalTab from '../../components/spec/index';
+import ModalTab from '../../components/spec/index';
 
 interface IProps {
   getSpec: (payload: ISpec) => void;
@@ -29,6 +29,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
   // 定义状态
   const history = useHistory();
   const [value, search] = useState<string>('');
+  const [flag, setflag] = useState<boolean>(false);
 
   // 定义生命周期
   useEffect(() => {
@@ -50,6 +51,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
   const dj = () => {
     let payload = { current: 1, size: 10, propName: value };
     props.getSpec(payload);
+    search('')
   };
 
   //清空
@@ -65,12 +67,11 @@ const SpecPage: ConnectRC<IProps> = (props) => {
 
   //搜索隐藏
   const move = () => {
-    console.log('隐藏');
+    setflag(!flag);
   };
 
   //分页
   const changPage = () => {
-    console.log();
     let payload = { current: 1, size: 10 };
     props.getSpec(payload);
   };
@@ -79,12 +80,13 @@ const SpecPage: ConnectRC<IProps> = (props) => {
   const del = async (num: IDel) => {
     await props.getSpecDel(num);
     await props.getSpec({ current: 1, size: 10 });
+    message.success('删除成功');
   };
 
   // render内容
   return (
     <div className={styles.spec}>
-      <div className={styles.head}>
+      <div className={!flag ? styles.head : styles.yc}>
         <div className={styles.item1}>
           <span style={styles.span}>属性名称</span>
           <Input
@@ -117,7 +119,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
       </div>
       <div className={styles.crud__menu}>
         <div className={styles.crud_left}>
-          <ModalModalTab />
+          <ModalTab />
         </div>
         <div className={styles.crud_right}>
           <Button

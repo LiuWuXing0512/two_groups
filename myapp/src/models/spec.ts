@@ -1,5 +1,5 @@
 import { ISpec ,RootObj} from '@/interfaces';
-import { getSpec,getSpecDel} from '@/services';
+import { getAdd, getSpec,getSpecDel,} from '@/services';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
@@ -15,12 +15,15 @@ export interface SpecModelType {
   effects: {
     getSpec: Effect;
     getSpecDel: Effect;
+    getAdd: Effect;
   };
   reducers: {
     SpecData: Reducer<ISpec>;
     // 启用 immer 之后
     // save: ImmerReducer<IndexModelState>;
   };
+
+  // subscriptions: { setup: Subscription };
 }
 
 // 模块的定义
@@ -48,8 +51,12 @@ const SpecModel: SpecModelType = {
       }
     },
     *getSpecDel({ payload }, { call, put, select }){
-      console.log(payload);
       let result=yield getSpecDel(payload);
+    },
+    *getAdd({ payload }, { call, put, select}){
+      console.log(payload);
+      
+      const result=yield getAdd(payload);
       console.log(result);
     }
   },
@@ -63,6 +70,19 @@ const SpecModel: SpecModelType = {
       };
     },
   },
+
+  // subscriptions: {
+  //   setup({ dispatch, history }) {
+  //     return history.listen(({ pathname }) => {
+  //       if (pathname === '/prod/spec') {
+  //         dispatch({
+  //           type: 'spec',
+  //         });
+  //       }
+  //     });
+  //   },
+  // },
+  
 };
 
 export default SpecModel;

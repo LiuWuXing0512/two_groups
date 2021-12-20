@@ -14,7 +14,7 @@ export interface RootObj{
 }
 
 export interface Records {
-  propId: number;
+  propId?: number;
   propName: string;
   rule: number;
   shopId?: any;
@@ -30,3 +30,6 @@ export interface ProdPropValues {
 export interface IDel{
   num: number;
 }
+
+// export interface IAdd{
+// }
