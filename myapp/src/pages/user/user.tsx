@@ -14,18 +14,19 @@ interface IProps {
     total: number,
     modalObj: IMemberList
 }
-
+interface Markdata {
+    key: string,
+    title: string
+}
 const { Option } = Select;
 const UserPage: ConnectRC<IProps> = (props) => {
     const { records, total, modalObj, changeStatus } = props
-    const [form] = Form.useForm();
     const [status, changestatus] = useState<string>('')
     const [nickName, changenickName] = useState<string>('')
     const [current] = useState<number>(1)
     const [size] = useState<number>(10)
     const [value, setValue] = React.useState(1)
     const [flag, setFlag] = useState<boolean>(true)
-
     const onFinish = (values: any) => {
         let nickName = values.nickName
         changenickName(nickName);
@@ -46,10 +47,9 @@ const UserPage: ConnectRC<IProps> = (props) => {
         await props.getModal(userId)
         setValue(modalObj.status)
         setIsModalVisible(true);
-        // console.log(userId);
     }
-    const changepage = (current) => {
-        let payload = { current, size, nickName, status }
+    const changepage = (page:number,pageSize:number) => {
+        let payload = { current:page, size:pageSize, nickName, status }
         props.getMemberList(payload)
     }
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -88,7 +88,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
         {
             title: '状态',
             dataIndex: 'status',
-            render: (text: number) => <span className={text? styles.normal:styles.forbidden}>{text ? '正常' : '禁用'}</span>,
+            render: (text: number) => <span className={text ? styles.normal : styles.forbidden}>{text ? '正常' : '禁用'}</span>,
         },
         {
             title: '注册时间',
@@ -98,6 +98,24 @@ const UserPage: ConnectRC<IProps> = (props) => {
             title: '操作',
             dataIndex: 'userId',
             render: (userId: string) => <Button type="primary" onClick={() => edit(userId)}><EditOutlined />编辑</Button>,
+        },
+    ];
+    const mockData: Markdata[] = [
+        {
+            key: '1',
+            title: '用户昵称',
+        },
+        {
+            key: '2',
+            title: '用户头像',
+        },
+        {
+            key: '3',
+            title: '状态',
+        },
+        {
+            key: '4',
+            title: '注册时间',
         },
     ];
     useEffect(() => {
@@ -141,14 +159,14 @@ const UserPage: ConnectRC<IProps> = (props) => {
                     </Form.Item>
                 </Form>
             </div> : <div></div>
-        }
+    }
         <div className={styles.oper}>
             <div></div>
             <div className={styles.operright}>
                 <Tooltip title="刷新">
                     <Button shape="circle" icon={<SyncOutlined />} />
                 </Tooltip>
-                <UserModal />
+                <UserModal mockData={mockData} />
                 <Tooltip title="搜索">
                     <Button shape="circle" icon={<SearchOutlined />} onClick={changeflag} />
                 </Tooltip>
@@ -168,9 +186,9 @@ const UserPage: ConnectRC<IProps> = (props) => {
                     <Pagination
                         total={total}
                         showTotal={(total) => `共 ${total} 条`}
-                        defaultPageSize={10}
-                        onChange={(current) => changepage(current)}
-                        defaultCurrent={1}
+                        defaultPageSize={size}
+                        onChange={(page,pageSize) => changepage(page,pageSize)}
+                        defaultCurrent={current}
                     />
                 </div>
             }

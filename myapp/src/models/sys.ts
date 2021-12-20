@@ -1,5 +1,5 @@
-import { IAuthorityItem, IMenuList } from '@/interfaces';
-import { getSystemNav } from '@/services';
+import { IAuthorityItem, IMenuList, ISysLogItem } from '@/interfaces';
+import { getSystemNav, getSyslog } from '@/services';
 import { getToken } from '@/utils';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
@@ -7,6 +7,9 @@ import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 export interface SysModelState {
   menuList: IMenuList[];
   authorities: IAuthorityItem[];
+  syslogList: ISysLogItem[];
+  syslogpages: number;
+  syslogtotal: number;
 }
 
 // 模块的接口
@@ -15,6 +18,7 @@ export interface SysModelType {
   state: SysModelState;
   effects: {
     getNavMenu: Effect;
+    getSyslog: Effect
   };
   reducers: {
     save: Reducer<SysModelState>;
@@ -30,28 +34,45 @@ const SysModel: SysModelType = {
 
   state: {
     menuList: [],
-    authorities: []
+    authorities: [],
+    syslogList: [],
+    syslogpages: 0,
+    syslogtotal: 0
   },
 
   // 异步action
   effects: {
-    *getNavMenu({ payload }, { call, put, select}) {
+    *getNavMenu({ payload }, { call, put, select }) {
       /**
        * 判断获取导航菜单的两个条件
        * 1. 有登陆态
        * 2. 没有导航菜单信息
-       **/ 
+       **/
       let token = getToken();
       console.log('token...', token);
       // 从redux中拿到状态
-      const menuList = yield select(state=>state.sys.menuList);
+      const menuList = yield select(state => state.sys.menuList);
 
-      if (!menuList.length && token){
-        let result = yield getSystemNav();  
-        
+      if (!menuList.length && token) {
+        let result = yield getSystemNav();
+
         yield put({
           type: 'save',
           payload: result
+        })
+      }
+    },
+    *getSyslog({ payload }, { call, put, select }) {
+      console.log(payload);
+      let result = yield getSyslog(payload);
+      if (result.records.length) {
+        yield put({
+          type: 'save',
+          payload: {
+            syslogList: result.records,
+            syslogpages: result.pages,
+            syslogtotal: result.total
+          }
         })
       }
     },
