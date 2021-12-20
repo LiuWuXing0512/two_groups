@@ -6,17 +6,18 @@ import styles from "./prodTag.less";
 import { Form, Input, Button, Select, Table, Tag, Tooltip, Pagination, Modal, } from 'antd';
 import { DeleteOutlined, SearchOutlined, AppstoreAddOutlined, SyncOutlined, EditOutlined } from '@ant-design/icons';
 // 引入封装的组件
-import  AddModal  from '@/components/prod/modal'
+import AddModal from '@/components/prod/modal'
 
 
 // 验证mapdistoprops的接口
 interface IProps {
     getprod: (payload: Iprod) => void,
     records: Record[],
+    total: number,
 }
 
 const prodTag: ConnectRC<IProps> = (props) => {
-    const { records } = props
+    const { records, total } = props
     const { Option } = Select;
 
     const tailLayout = {
@@ -143,10 +144,26 @@ const prodTag: ConnectRC<IProps> = (props) => {
     // 事件处理函数
     const [isModalVisible, setIsModalVisible] = useState(false);
 
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
+
+    // 分页的api，接收两个参数
+    function onChange(pageNumber, pageSize) {
+        console.log('Page当前页: ', pageNumber);
+        console.log('一页几条:', pageSize);
+        // 重新请求数据
+        props.getprod({
+            current: pageNumber,
+            size: pageSize,
+        })
+
+    }
 
     // render内容
     return (<div className='prodTag'>
@@ -165,8 +182,8 @@ const prodTag: ConnectRC<IProps> = (props) => {
                         allowClear
                         className={styles.input}
                     >
-                        <Option value="1">正常</Option>
-                        <Option value="0">禁用</Option>
+                        <Option value={1}>正常</Option>
+                        <Option value={0}>禁用</Option>
                     </Select>
                 </Form.Item>
 
@@ -204,24 +221,28 @@ const prodTag: ConnectRC<IProps> = (props) => {
 
 
         {/* 表格 */}
-        <Table bordered={true} columns={columns} dataSource={records} pagination={false} rowKey='id'/>
+        <Table bordered={true} columns={columns} dataSource={records} pagination={false} rowKey='id' />
 
         <Pagination
             className={styles.page}
-            total={records.length}
+            total={total}
             showSizeChanger
             showQuickJumper
+            onChange={onChange}
             onShowSizeChange={onShowSizeChange}
             showTotal={total => `Total ${total} items`}
         />
 
         {/* 点击新增，出现的弹框 */}
         <Modal title="新增"
+            width={'50%'}
             visible={isModalVisible}
-            onCancel={handleCancel} 
+            onCancel={handleCancel}
             footer={null}
-            >
-           <AddModal handleCancel={handleCancel}/>
+        >
+            <AddModal
+                handleCancel={handleCancel}
+                handleOk={handleOk} />
         </Modal>
 
 
@@ -231,7 +252,8 @@ const prodTag: ConnectRC<IProps> = (props) => {
 const mapStateToProps = (state: any) => {
     console.log(state.prod, 'ddddddddddddddddddd');
     return {
-        records: state.prod.records
+        records: state.prod.records,
+        total: state.prod.total
     }
 }
 

@@ -6,7 +6,8 @@ import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 export interface ProdModelState {
     current: number,
     size: number,
-    records:Record[]
+    records:Record[],
+    total:number
 }
 
 // 模块的接口
@@ -32,7 +33,8 @@ const ProdModel: ProdModelType = {
     state: {
         current: 1,
         size: 10,
-        records:[]
+        records:[],
+        total:0
     },
 
     // 异步action
@@ -46,7 +48,8 @@ const ProdModel: ProdModelType = {
                 yield put({
                     type: 'save',
                     payload: {
-                        records:result.records 
+                        records:result.records ,
+                        total:result.total
                     }
                 })
             }
@@ -57,9 +60,10 @@ const ProdModel: ProdModelType = {
 
         },
         *addProd({payload},{call,put,select}){
-            console.log(payload,'addddddddddddddddddddddddddddddda');
-            
+            let result = yield addProd(payload)
+            console.log(result,'加加加加加加加加');
         }
+
     },
 
     // 同步action

@@ -20,13 +20,13 @@ export interface Record {
 }
 
 export interface Iaddprod{
-  id: number
+  id?: number
   isDefault?: null 
   prodCount?: null
   seq?: string
   shopId?: null
-  status:Boolean
-  style: Boolean
+  status:number
+  style: number
   title: string
 }
 
