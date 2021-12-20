@@ -9,6 +9,7 @@ import {
   Modal,
   Form,
   Input,
+  Space,
   Radio,
   InputNumber,
 } from 'antd';
@@ -46,6 +47,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
   const [Item, setItem] = useState<IRecordsItem>({} as IRecordsItem);
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
   const [modal, setModal] = useState<boolean>(false);
+  const [editStatus, setEditStatus] = useState<number>(0);
   const columns = [
     {
       title: '热搜标题',
@@ -103,7 +105,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
     props.hotSearchList();
   }, []);
   // 页码
-  const onChange = (pageNumber: number, sizeNumber: any) => {
+  const onChange = (pageNumber: number, sizeNumber: number) => {
     props.hotPage({
       size: sizeNumber,
       current: pageNumber ? pageNumber : 1,
@@ -132,10 +134,13 @@ const HotSearch: ConnectRC<IProps> = (props) => {
   };
   // 编辑
   const headleEdit = (item) => {
+    console.log(item);
+
     setIsModalVisible(true);
     // 回显
     form.setFieldsValue(item);
     setItem(item);
+    setEditStatus(item.status);
     setNumber({
       value: item.seq,
     });
@@ -147,6 +152,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
       ...Item,
       ...form.getFieldsValue(),
       seq: number.value,
+      status: editStatus,
     };
     props.puthotSearchSum(obj);
   };
@@ -186,6 +192,11 @@ const HotSearch: ConnectRC<IProps> = (props) => {
     setModal(false);
   };
 
+  const onChangeEdit = (e) => {
+    console.log('radio checked', e.target.value);
+    setEditStatus(e.target.value);
+  };
+
   return (
     <div className="hotSearch">
       <HotSearchHeader flag={flag} />
@@ -218,12 +229,15 @@ const HotSearch: ConnectRC<IProps> = (props) => {
                 onChange={onNumberChange}
               />
             </Form.Item>
-            <Form.Item name="status" label="启用状态">
-              <Radio.Group>
-                <Radio value="0">未启用</Radio>
-                <Radio value="1">启用</Radio>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <span>状态：</span>
+              <Radio.Group onChange={onChangeEdit} value={editStatus}>
+                <Space direction="vertical">
+                  <Radio value={0}>未启用</Radio>
+                  <Radio value={1}>启用</Radio>
+                </Space>
               </Radio.Group>
-            </Form.Item>
+            </div>
           </Form>
         </Modal>
         <Modal
@@ -285,16 +299,20 @@ const HotSearch: ConnectRC<IProps> = (props) => {
           columns={columns}
           loading={loading}
           dataSource={props.records}
+          pagination={false}
         />
-        <Pagination
-          showQuickJumper
-          current={props.current}
-          defaultCurrent={props.current ? props.current : 1}
-          showSizeChanger={true}
-          total={props.total}
-          pageSize={props.size}
-          onChange={onChange}
-        />
+        <div className={styles.paginationTotal}>
+          <span style={{ marginRight: '10px' }}> 共{props.total}条</span>
+          <Pagination
+            showQuickJumper
+            current={props.current}
+            defaultCurrent={props.current ? props.current : 1}
+            showSizeChanger={true}
+            total={props.total}
+            pageSize={props.size}
+            onChange={onChange}
+          />
+        </div>
       </div>
     </div>
   );
