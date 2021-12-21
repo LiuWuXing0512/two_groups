@@ -1,26 +1,35 @@
 import React,{Dispatch,useState,useEffect} from 'react'
-import { Form, Input, Button, Table, Pagination, Modal, Radio, Tooltip } from 'antd';
+import { Form, Input, Button, Table, Pagination, Modal, Radio, Tooltip, Divider  } from 'antd';
 import { ConnectRC, connect, useHistory } from 'umi';
-import { ISysLogData } from '@/interfaces';
+import { ISysLogData,ISysLogItem } from '@/interfaces';
 import { SyncOutlined, SearchOutlined, EditOutlined } from '@ant-design/icons'
 import UserModal from '@/components/usermodal/index'
 import styles from './log.less';
 interface IProps {
-    getSyslog(payload:ISysLogData):void
+    getSyslog(payload:ISysLogData):void,
+    syslogList: ISysLogItem[],
+    syslogpages:number,
+    syslogtotal:number,
 }
 interface Markdata {
     key: string,
     title: string
 }
 const Syslog:ConnectRC<IProps> = (props) => {
+    const { syslogList, syslogpages, syslogtotal } = props
     const [current] = useState<number>(1)
+    const [username,setusername] = useState<string>('')
+    const [operation,setoperation] = useState<string>('')
     const [size] = useState<number>(10)
     const [flag, setFlag] = useState<boolean>(true)
-    const onFinish=()=>{
-
+    const [num, setnum] = useState<number>(0)
+    const [form] = Form.useForm();
+    const onFinish=(value)=>{
+        let payload = { t: +new Date,current,size,username:value.username,operation:value.operation }
+        props.getSyslog(payload)
     }
     const onReset=()=>{
-
+        form.resetFields();
     }
     const changeflag = () => {
         setFlag(!flag)
@@ -55,20 +64,58 @@ const Syslog:ConnectRC<IProps> = (props) => {
             title: '创建时间',
         },
     ];
-    useEffect(()=>{
-        let payload={
-            t: +new Date,
-            current,
-            size
+    const columns = [
+        {
+            title: '用户名',
+            dataIndex: 'username'
+        },
+        {
+            title: '用户操作',
+            dataIndex: 'operation'
+        },
+        {
+            title: '请求方法',
+            dataIndex: 'method'
+        },
+        {
+            title: '请求参数',
+            dataIndex: 'params'
+        },
+        {
+            title: '执行时长(毫秒)',
+            dataIndex: 'time'
+        },
+        {
+            title: 'IP地址',
+            dataIndex: 'ip'
+        },
+        {
+            title: '创建时间',
+            dataIndex: 'createDate'
+        },
+    ];
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: ISysLogItem[]) => {
+          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+          setnum(selectedRows.length)
         }
+    };
+    const changepage = (page:number,pageSize:number) => {
+        let payload = { t: +new Date,current:page,size:pageSize }
         props.getSyslog(payload)
-    })
+    }
+    const [selectionType] = useState<'checkbox' | 'radio'>('checkbox');
+    useEffect(()=>{
+        let payload={t: +new Date,current,size}
+        props.getSyslog(payload)
+    },[])
     return (
         <div>
             {
                 flag ?
                 <div className={styles.topsearch}>
                     <Form
+                        form={form}
                         className={styles.formbasic}
                         name="basic"
                         labelCol={{ span: 8 }}
@@ -80,16 +127,16 @@ const Syslog:ConnectRC<IProps> = (props) => {
                         <Form.Item
                             label='用户名'
                             className={styles.nickname}
-                            name="nickName"
+                            name="username"
                         >
-                            <Input placeholder='用户名' value={'nickName'} />
+                            <Input placeholder='用户名' value={username} />
                         </Form.Item>
                         <Form.Item
                             label='用户操作'
                             className={styles.nickname}
-                            name="nickName"
+                            name="operation"
                         >
-                            <Input placeholder='用户操作' value={'nickName'} />
+                            <Input placeholder='用户操作' value={operation} />
                         </Form.Item>
                         <Form.Item className={styles.operation} wrapperCol={{ offset: 8, span: 16 }}>
                             <Button type="primary" htmlType="submit">
@@ -115,24 +162,39 @@ const Syslog:ConnectRC<IProps> = (props) => {
                 </div>
             </div>
             <div className='count'>
-                {/* <Table
+                <div><span>当前表格已选择 <b>{num}</b> 项</span><span className={styles.clear}>清空</span></div>
+                <Table
                     size='middle'
-                    rowKey="userId"
+                    rowKey="id"
+                    scroll={{ y: 3000 }}
+                    rowSelection={{
+                        type: selectionType,
+                        ...rowSelection,
+                    }}
                     columns={columns}
                     pagination={false}
-                    dataSource={records}
+                    dataSource={syslogList}
                 >
-                </Table> */}
+                </Table>
+            </div>
+            <div className={styles.page}>
+                <Pagination
+                    total={syslogtotal}
+                    showTotal={(total) => `共 ${total} 条`}
+                    defaultPageSize={size}
+                    onChange={(page,pageSize) => changepage(page,pageSize)}
+                    defaultCurrent={current}
+                />
             </div>
         </div>
     )
 }
 const mapStateToProps = (state: any) => {
-    console.log('state...', state.member.records);
+    console.log('state...', state.sys);
     return {
-        records: state.member.records,
-        total: state.member.total,
-        modalObj: state.member.modalObj
+        syslogList: state.sys.syslogList,
+        syslogtotal: state.sys.syslogtotal,
+        syslogpages: state.sys.syslogpages
     };
 };
 

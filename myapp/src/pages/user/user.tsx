@@ -27,6 +27,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
     const [size] = useState<number>(10)
     const [value, setValue] = React.useState(1)
     const [flag, setFlag] = useState<boolean>(true)
+    const [form] = Form.useForm();
     const onFinish = (values: any) => {
         let nickName = values.nickName
         changenickName(nickName);
@@ -34,10 +35,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
         props.getMemberList(payload)
     };
     const onReset = () => {
-        let status = ''
-        changestatus(status);
-        let nickName = ''
-        changenickName(nickName);
+        form.resetFields();
     };
     const handleChange = (value) => {
         let status = value
@@ -127,6 +125,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
             <div className={styles.topsearch}>
                 <Form
                     className={styles.formbasic}
+                    form={form}
                     name="basic"
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 16 }}
@@ -141,14 +140,16 @@ const UserPage: ConnectRC<IProps> = (props) => {
                     >
                         <Input placeholder='用户昵称' value={nickName} />
                     </Form.Item>
-                    <div className={styles.status}>
-                        <span>状态：</span>
-                        <Select defaultValue={status} style={{ width: 120 }} onChange={handleChange}>
+                    <Form.Item
+                        label='状态'
+                        className={styles.status}
+                        name="status"
+                    >
+                        <Select style={{ width: 120 }} placeholder="状态" onChange={handleChange}>
                             <Option value="1">正常</Option>
                             <Option value="0">禁用</Option>
                         </Select>
-                    </div>
-
+                    </Form.Item>
                     <Form.Item className={styles.operation} wrapperCol={{ offset: 8, span: 16 }}>
                         <Button type="primary" htmlType="submit">
                             搜索
