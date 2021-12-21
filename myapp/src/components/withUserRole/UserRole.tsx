@@ -52,6 +52,8 @@ const UserRole = (props) => {
             type: "user/roleList",
             payload: { t: new Date().getTime(), current: 1, size: 10 }
         })
+        console.log(records);
+
     }, [])
 
     const onSelectChange = selectedRowKeys => {
@@ -102,6 +104,7 @@ const UserRole = (props) => {
             <div className='user-Table'>
                 <div>
                     <div>当前表格以选择 <b>0</b> 项 <a >清空</a></div>
+
                 </div>
                 <div className="prodListBottom">
                     <Table
@@ -109,7 +112,7 @@ const UserRole = (props) => {
                         columns={columns}
                         dataSource={records}
                         bordered={true}
-                        rowKey="roleId"
+                        rowKey="userId"
                         pagination={{ pageSize: 5 }}
                     />
                 </div>

@@ -1,8 +1,10 @@
 import { getAreaList } from '@/services';
-import { IaddressList , Istate} from '@/interfaces';
-import { Effect,  Reducer } from 'umi';
-let list:Array<IaddressList> = [];
-const addressFilter = (addressList:IaddressList, parentId:number) => {
+import { IaddressList, Istate } from '@/interfaces';
+import { Effect, Reducer } from 'umi';
+
+
+let list: Array<IaddressList> = [];
+const addressFilter = (addressList: IaddressList, parentId: number) => {
   if (parentId === 0) {
     list = addressList.filter(item => item.parentId === parentId)
     list.map(item => Object.defineProperty(item, 'children', { value: addressFilter(addressList, item.areaId), writable: true }));
@@ -34,7 +36,7 @@ export interface AreaModelType {
 
 
 // 模块的定义
-const AreaModel:AreaModelType = {
+const AreaModel: AreaModelType = {
   namespace: 'area',
 
   state: {
@@ -49,7 +51,8 @@ const AreaModel:AreaModelType = {
         type: 'setAreaList',
         payload: addressFilter(result, 0)
       })
-    }
+    },
+    
   },
 
   // 同步action
@@ -59,7 +62,7 @@ const AreaModel:AreaModelType = {
         ...state,
         areaList: action.payload
       }
-    }
+    },
   },
 };
 
