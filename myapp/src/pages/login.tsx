@@ -45,9 +45,9 @@ const LoginPage: ConnectRC<IProps> = (props) => {
     <div className={styles.login}>
       <h2>电商运营后台</h2>
       <Form
-        name="basic"
-        wrapperCol={{ offset: 7, span: 10 }}
-        initialValues={{
+          name="basic"
+          wrapperCol={{ offset: 7, span: 10 }}
+          initialValues={{
           principal: 'admin',
           credentials: '123456',
           imageCode: '',
