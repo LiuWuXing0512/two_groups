@@ -12,6 +12,7 @@ import { ConnectRC, connect, useHistory } from 'umi';
 import styles from './spec.less';
 const { Column, ColumnGroup } = Table;
 import ModalTab from '../../components/spec/index';
+import Edits from '../../components/spec/edit';
 
 interface IProps {
   getSpec: (payload: ISpec) => void;
@@ -30,6 +31,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
   const history = useHistory();
   const [value, search] = useState<string>('');
   const [flag, setflag] = useState<boolean>(false);
+  const [editflag, setedit] = useState<boolean>(false);
 
   // 定义生命周期
   useEffect(() => {
@@ -51,7 +53,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
   const dj = () => {
     let payload = { current: 1, size: 10, propName: value };
     props.getSpec(payload);
-    search('')
+    search('');
   };
 
   //清空
@@ -81,6 +83,13 @@ const SpecPage: ConnectRC<IProps> = (props) => {
     await props.getSpecDel(num);
     await props.getSpec({ current: 1, size: 10 });
     message.success('删除成功');
+  };
+
+  //编辑
+  const edit = (record: Records) => {
+    setedit(!editflag);
+    console.log(record);
+    // props.getEdit()
   };
 
   // render内容
@@ -193,7 +202,8 @@ const SpecPage: ConnectRC<IProps> = (props) => {
             key="propId"
             render={(record) => (
               <div>
-                <Button>编辑</Button>&emsp;
+                <Edits record={record} editflag={editflag} />
+                <Button onClick={() => edit(record)}>编辑</Button>&emsp;
                 <Button onClick={() => del(record.propId)}>删除</Button>
               </div>
             )}
