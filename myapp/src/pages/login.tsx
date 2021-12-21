@@ -1,5 +1,4 @@
 import React, { Dispatch, useEffect, useState } from 'react';
-import bg from '@/assets/img/login-bg.png';
 import { Form, Input, Button, message } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './login.less';
@@ -46,9 +45,9 @@ const LoginPage: ConnectRC<IProps> = (props) => {
     <div className={styles.login}>
       <h2>电商运营后台</h2>
       <Form
-        name="basic"
-        wrapperCol={{ offset: 7, span: 10 }}
-        initialValues={{
+          name="basic"
+          wrapperCol={{ offset: 7, span: 10 }}
+          initialValues={{
           principal: 'admin',
           credentials: '123456',
           imageCode: '',
@@ -57,6 +56,7 @@ const LoginPage: ConnectRC<IProps> = (props) => {
       >
         <Form.Item
           name="principal"
+          className={styles.ant_row_user_pwd}
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
           <Input placeholder="账号" />
@@ -64,6 +64,7 @@ const LoginPage: ConnectRC<IProps> = (props) => {
 
         <Form.Item
           name="credentials"
+          className={styles.ant_row_user_pwd}
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
           <Input.Password placeholder="密码" />
@@ -92,7 +93,6 @@ const LoginPage: ConnectRC<IProps> = (props) => {
 };
 
 const mapStateToProps = (state: any) => {
-  console.log('state...', state);
   return {};
 };
 

@@ -1,6 +1,5 @@
 import React, { Component, Dispatch, useEffect, useState } from 'react'
-import { Form, Input, Button, Table, Pagination, Modal, Radio, Tooltip } from 'antd';
-import { Select } from 'antd';
+import { Form, Input, Button, Table, Pagination, Modal, Radio, Tooltip, Select } from 'antd';
 import { IMemberData, IMemberList, IChangeStatus } from '@/interfaces';
 import { ConnectRC, connect, useHistory } from 'umi';
 import styles from './user.less';
@@ -138,7 +137,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
                         className={styles.nickname}
                         name="nickName"
                     >
-                        <Input placeholder='用户昵称' value={nickName} />
+                        <Input style={{ width: 140 }} placeholder='用户昵称' value={nickName} />
                     </Form.Item>
                     <Form.Item
                         label='状态'
@@ -151,12 +150,14 @@ const UserPage: ConnectRC<IProps> = (props) => {
                         </Select>
                     </Form.Item>
                     <Form.Item className={styles.operation} wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
-                            搜索
-                        </Button>
-                        <Button htmlType="button" onClick={onReset}>
-                            清空
-                        </Button>
+                        <div className={styles.operation}>
+                            <Button type="primary" htmlType="submit">
+                                搜索
+                            </Button>
+                            <Button htmlType="button" onClick={onReset}>
+                                清空
+                            </Button>
+                        </div>
                     </Form.Item>
                 </Form>
             </div> : <div></div>

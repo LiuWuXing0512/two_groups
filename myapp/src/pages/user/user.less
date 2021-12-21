@@ -3,19 +3,8 @@
     height: 55px;
 }
 .formbasic{
-    width: 100%;
-    .nickname{
-        width: 40%;
-        float: left;
-    }
-    .status{
-        margin-left: 20px;
-        float: left;
-    }
-    .operation{
-        width: 200px;
-        float: left;
-    }
+    display: flex;
+    justify-content: space-around;
 }
 .page{
     margin-top: 20px;
@@ -63,4 +52,11 @@
     box-sizing: border-box;
     border: 1px solid rgba(245,108,108,.2);
     white-space: nowrap;
+}
+.operation{
+    display: flex;
+    margin-top: 6px;
+    button{
+        margin: 0 5px;
+    }
 }

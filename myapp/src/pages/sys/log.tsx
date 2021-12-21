@@ -129,22 +129,24 @@ const Syslog:ConnectRC<IProps> = (props) => {
                             className={styles.nickname}
                             name="username"
                         >
-                            <Input placeholder='用户名' value={username} />
+                            <Input style={{ width: 140 }} placeholder='用户名' value={username} />
                         </Form.Item>
                         <Form.Item
                             label='用户操作'
                             className={styles.nickname}
                             name="operation"
                         >
-                            <Input placeholder='用户操作' value={operation} />
+                            <Input style={{ width: 140 }} placeholder='用户操作' value={operation} />
                         </Form.Item>
                         <Form.Item className={styles.operation} wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button type="primary" htmlType="submit">
-                                搜索
-                            </Button>
-                            <Button htmlType="button" onClick={onReset}>
-                                清空
-                            </Button>
+                            <div className={styles.operation}>
+                                <Button type="primary" htmlType="submit">
+                                    搜索
+                                </Button>
+                                <Button htmlType="button" onClick={onReset}>
+                                    清空
+                                </Button>
+                            </div>
                         </Form.Item>
                     </Form>
                 </div> : <div></div>
@@ -205,16 +207,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
                 type: 'sys/getSyslog',
                 payload,
             }),
-        // getModal: (userId: string) =>
-        //     dispatch({
-        //         type: 'member/getModal',
-        //         userId,
-        //     }),
-        // changeStatus: (payload: IChangeStatus) =>
-        //     dispatch({
-        //         type: 'member/changeStatus',
-        //         payload,
-        //     }),
     };
 };
 
