@@ -2,7 +2,7 @@ import { IUserInfo, IUserList  } from '@/interfaces';
 import { login, userList, roleList } from '@/services';
 import { setToken } from '@/utils';
 import { Effect, Reducer } from 'umi';
-
+ 
 // 模块内部state接口
 export interface UserModelState {
   userInfo: IUserInfo;

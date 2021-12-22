@@ -1,9 +1,16 @@
 export interface ILoginForm {
   t: number;
-  principal: string;
-  credentials: string;
-  sessionUUID: string;
-  imageCode: string;
+  principal?: string;
+  credentials?: string;
+  sessionUUID?: string;
+  imageCode?: string;
+  current?: number;
+  size?:number;
+}
+export interface IPropsUser {
+  roleList: IUserList;
+  userInfo: IUserInfo;
+  userList: IUserList;
 }
 export interface IUserInfo {
   access_token: string;
@@ -17,7 +24,7 @@ export interface IUserInfo {
 export interface IUserList {
   current: number
   pages: number
-  records: Array<userItem | roleItem>
+  records: Array<userItem | roleItem | any>
   searchCount: boolean
   size: number
   total: number

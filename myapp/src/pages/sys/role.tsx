@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Input, Button, Tooltip, Space } from 'antd';
 import { SearchOutlined, DeleteOutlined, PlusOutlined, RedoOutlined, AppstoreFilled, EditOutlined } from '@ant-design/icons';
-import { connect } from 'umi'
+import { connect, ConnectRC } from 'umi'
+import { IPropsUser } from '@/interfaces';
 import "./user.less"
 
+interface Iuser {
+    user: IPropsUser
+}
 
 const columns: any = [    /**/
     {
@@ -43,7 +47,7 @@ const columns: any = [    /**/
 
 
 
-const UserRole = (props) => {
+const UserRole: ConnectRC<any> = (props) => {
     const { records } = props.user.roleList   /**/
     const [selectedRowKeys, setSelectedRowKeys] = useState(records)
 
@@ -54,7 +58,7 @@ const UserRole = (props) => {
         })
     }, [])
 
-    const onSelectChange = selectedRowKeys => {
+    const onSelectChange = (selectedRowKeys: any) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         setSelectedRowKeys({ selectedRowKeys });
     };
@@ -118,4 +122,4 @@ const UserRole = (props) => {
     );
 }
 
-export default connect(({ user }: any) => ({ user }))(UserRole);
+export default connect(({ user }: Iuser) => ({ user }))(UserRole);

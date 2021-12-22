@@ -1,9 +1,10 @@
-import { Component, useRef } from 'react';
+import { Component } from 'react';
 import './area.less'
 import { Input, Button, Tree } from 'antd';
 import { connect } from 'umi';
 import { IPropsArea } from '@/interfaces';
-class Area extends Component<any> {
+
+class Area extends Component <any> {
     componentDidMount() {
         this.props.dispatch({
             type: 'area/addressList',

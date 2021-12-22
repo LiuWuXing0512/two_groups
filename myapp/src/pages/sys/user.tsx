@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Input, Button, Tooltip , Space } from 'antd';
-import { SearchOutlined, DeleteOutlined, PlusOutlined, RedoOutlined, AppstoreFilled , EditOutlined } from '@ant-design/icons';
-import { connect } from 'umi'
+import { Table, Input, Button, Tooltip, Space } from 'antd';
+import { SearchOutlined, DeleteOutlined, PlusOutlined, RedoOutlined, AppstoreFilled, EditOutlined } from '@ant-design/icons';
+import { connect, ConnectRC } from 'umi'
+import { IPropsUser } from '@/interfaces';
 import "./user.less"
 
 
@@ -10,7 +11,6 @@ const columns: any = [   /**/
         title: '用户名',
         key: 'username',
         dataIndex: 'username',
-
     },
     {
         title: '邮箱',
@@ -52,31 +52,28 @@ const columns: any = [   /**/
 ];
 
 
+interface Iuser {
+    user: IPropsUser
+}
 
-const user = (props) => {
-    const { records } = props.user.userList /**/
 
-
+const user: ConnectRC<any> = (props) => {
+    const { records } = props.user.userList
     const [selectedRowKeys, setSelectedRowKeys] = useState(records)
-
-    useEffect(() => {                      /**/
+    useEffect(() => {
         props.dispatch({
             type: "user/userList",
             payload: { t: new Date().getTime(), current: 1, size: 10 }
         })
     }, [])
-
-    const onSelectChange = selectedRowKeys => {
+    const onSelectChange = (selectedRowKeys: any) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         setSelectedRowKeys({ selectedRowKeys });
     };
-
-
     const rowSelection = {
         selectedRowKeys,
         onChange: onSelectChange,
     };
-
     return (
         <div className='user'>
             <div className='userSearch'>
@@ -131,4 +128,4 @@ const user = (props) => {
     );
 }
 
-export default connect(({ user }: any) => ({ user }))(user);
+export default connect(({ user }: Iuser) => ({ user }))(user);
