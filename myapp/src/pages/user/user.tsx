@@ -40,13 +40,13 @@ const UserPage: ConnectRC<IProps> = (props) => {
         let status = value
         changestatus(status);
     }
-    const edit = async (userId) => {
+    const edit = async (userId, item) => {
         await props.getModal(userId)
-        setValue(modalObj.status)
+        setValue(item.status)
         setIsModalVisible(true);
     }
-    const changepage = (page:number,pageSize:number) => {
-        let payload = { current:page, size:pageSize, nickName, status }
+    const changepage = (page: number, pageSize: number) => {
+        let payload = { current: page, size: pageSize, nickName, status }
         props.getMemberList(payload)
     }
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -72,31 +72,47 @@ const UserPage: ConnectRC<IProps> = (props) => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value)
     };
-    const columns = [
+    const coum = [
         {
+            key: '1',
+            align: 'center',
             title: '用户昵称',
+            width: 160,
             dataIndex: 'nickName',
         },
         {
+            key: '2',
+            align: 'center',
             title: '用户头像',
+            width: 160,
             dataIndex: 'pic',
             render: (text: string) => <img src={text} />
         },
         {
+            key: '3',
+            align: 'center',
             title: '状态',
+            width: 160,
             dataIndex: 'status',
             render: (text: number) => <span className={text ? styles.normal : styles.forbidden}>{text ? '正常' : '禁用'}</span>,
         },
         {
+            key: '4',
+            align: 'center',
             title: '注册时间',
+            width: 160,
             dataIndex: 'userRegtime',
         },
         {
+            key: '5',
+            align: 'center',
             title: '操作',
+            width: 160,
             dataIndex: 'userId',
-            render: (userId: string) => <Button type="primary" onClick={() => edit(userId)}><EditOutlined />编辑</Button>,
+            render: (userId: string, item: IMemberList) => <Button type="primary" onClick={() => edit(userId, item)}><EditOutlined />编辑</Button>,
         },
     ];
+    const [columns, setcolumns] = useState<Object[]>(coum)
     const mockData: Markdata[] = [
         {
             key: '1',
@@ -137,7 +153,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
                         className={styles.nickname}
                         name="nickName"
                     >
-                        <Input style={{ width: 140 }} placeholder='用户昵称' value={nickName} />
+                        <Input style={{ width: 160, height: 26 }} placeholder='用户昵称' value={nickName} />
                     </Form.Item>
                     <Form.Item
                         label='状态'
@@ -168,7 +184,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
                 <Tooltip title="刷新">
                     <Button shape="circle" icon={<SyncOutlined />} />
                 </Tooltip>
-                <UserModal mockData={mockData} />
+                <UserModal mockData={mockData} setcolumns={setcolumns} coum={coum} />
                 <Tooltip title="搜索">
                     <Button shape="circle" icon={<SearchOutlined />} onClick={changeflag} />
                 </Tooltip>
@@ -189,7 +205,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
                         total={total}
                         showTotal={(total) => `共 ${total} 条`}
                         defaultPageSize={size}
-                        onChange={(page,pageSize) => changepage(page,pageSize)}
+                        onChange={(page, pageSize) => changepage(page, pageSize)}
                         defaultCurrent={current}
                     />
                 </div>
@@ -201,7 +217,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
                 <img className={styles.modalimg} src={modalObj.pic} alt="" />
             </p>
             <Form.Item label='用户昵称' >
-                <Input placeholder='用户昵称' value={modalObj.nickName} disabled />
+                <Input placeholder='用户昵称' style={{ width: 240 }} value={modalObj.nickName} disabled />
             </Form.Item>
             <div>
                 <span>状态：</span>

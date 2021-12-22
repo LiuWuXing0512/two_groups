@@ -29,3 +29,10 @@ export function getProdList(params: IProdData) {
         params
     })
 }
+
+//产品管理编辑信息
+export function editProdList(id: number) {
+    return request(`/prod/prod/info/${id}`, {
+        method: 'GET',
+    })
+}

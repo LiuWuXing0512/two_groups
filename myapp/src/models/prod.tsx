@@ -1,5 +1,5 @@
 import { Record,IProdListItem } from '@/interfaces'
-import { getProd,addProd,getProdList } from '@/services';
+import { getProd,addProd,getProdList,editProdList } from '@/services';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
@@ -10,6 +10,7 @@ export interface ProdModelState {
     total:number,
     prodList:IProdListItem[],
     prodListtotal:number,
+    editproddetail:IProdListItem
 }
 
 // 模块的接口
@@ -20,6 +21,7 @@ export interface ProdModelType {
         getprod: Effect;
         addProd:Effect;
         getProdList:Effect;
+        editProdList:Effect
     };
     reducers: {
         save: Reducer<ProdModelState>;
@@ -39,7 +41,8 @@ const ProdModel: ProdModelType = {
         records:[],
         total:0,
         prodList:[],
-        prodListtotal:0
+        prodListtotal:0,
+        editproddetail:{} as IProdListItem
     },
 
     // 异步action
@@ -76,6 +79,18 @@ const ProdModel: ProdModelType = {
                     payload: {
                         prodList:result.records,
                         prodListtotal:result.total,
+                    }
+                })
+            }
+        },
+        *editProdList({id},{call,put}){
+            let result=yield editProdList(id)
+            console.log(result);
+            if(result.prodId){
+                yield put({
+                    type: 'save',
+                    payload: {
+                        editproddetail:result
                     }
                 })
             }
