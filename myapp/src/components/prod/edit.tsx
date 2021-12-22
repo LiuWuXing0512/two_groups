@@ -1,39 +1,17 @@
 import React, { Dispatch, useEffect, useState } from 'react';
 import { ConnectRC, connect } from 'umi';
 import { Form, Radio, Input,Button } from 'antd';
-import { Iaddprod,Iprod } from '@/interfaces'
-import styles from './modal.less'
 
-interface IProps {
+interface IProps{
     handleCancel:()=>void,
-    handleOk:()=>void,
-    addProd:(payload:Iaddprod)=>void
-    getprod:(payload:Iprod)=>void
-    current:number,
-    size:number
+    edit:Object
 }
 
-const AddModal: ConnectRC<IProps> = (props) => {
-    
-    const { handleCancel,handleOk } =props
+const EditModal:ConnectRC<IProps>=(props)=>{
+    const {handleCancel,edit}=props
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        // 添加数据的请求
-        props.addProd({
-            title:values.title,
-            status:values.status,
-            style:values.status,
-            seq:values.seq
-        })
-        const { current , size }=props
-        // 添加完数据从新请求
-        props.getprod({
-            current,size
-        })
-        handleOk()
-        // 清空value的值
-       
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -42,6 +20,7 @@ const AddModal: ConnectRC<IProps> = (props) => {
 
     return (
         <div>
+            {{edit}}
             <Form
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 16 }}
@@ -96,27 +75,15 @@ const AddModal: ConnectRC<IProps> = (props) => {
     )
 }
 
-const mapStateToProps = (state:any) => {
-    // console.log(state.prod,'=============================================');
-    return {
-        current:state.prod.current,
-        size:state.prod.size
+const mapStateToProps=(state:any)=>{
+    return{
+        edit:state.prod.edit
     }
+    
 }
 
+const mapDispatchToProps=(dispatch:Dispatch<any>)=>{
 
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-    return {
-        addProd: (payload: Iaddprod) => dispatch({
-            type: 'prod/addProd',
-            payload
-        }),
-        getprod:(payload:Iprod)=>dispatch({
-            type:'prod/getprod',
-            payload
-        })
-
-    }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddModal)
+export default connect(mapStateToProps,mapDispatchToProps)(EditModal)

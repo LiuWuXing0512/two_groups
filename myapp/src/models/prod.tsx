@@ -1,13 +1,15 @@
 import { Record } from '@/interfaces'
-import { getProd,addProd } from '@/services';
+import { getProd,addProd,DeleteProd,getEdit,EditProd } from '@/services';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
-
+import { message} from 'antd';
+  
 // 模块内部state接口
 export interface ProdModelState {
     current: number,
     size: number,
     records:Record[],
-    total:number
+    total:number,
+    edit:Object
 }
 
 // 模块的接口
@@ -15,8 +17,11 @@ export interface ProdModelType {
     namespace: 'prod';
     state: ProdModelState;
     effects: {
-        getprod: Effect;
-        addProd:Effect
+        getprod: Effect,
+        addProd:Effect,
+        delProd:Effect,
+        getEdit:Effect,
+        editProd:Effect
     };
     reducers: {
         save: Reducer<ProdModelState>;
@@ -34,14 +39,14 @@ const ProdModel: ProdModelType = {
         current: 1,
         size: 10,
         records:[],
-        total:0
+        total:0,
+        edit:{}
     },
 
     // 异步action
     effects: {
         *getprod({ payload }, { call, put, select }) {
             // console.log(payload);
-
             let result = yield getProd(payload);
             // console.log(result)
             if (result.records) {
@@ -53,15 +58,55 @@ const ProdModel: ProdModelType = {
                     }
                 })
             }
-            // 从redux中拿到状态
-            // const state=yield select(state=>state.prod.records)
-            // console.log(state,'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
-            
-
         },
         *addProd({payload},{call,put,select}){
             let result = yield addProd(payload)
             console.log(result,'加加加加加加加加');
+            if(result){
+                message.success('添加成功');
+            }
+        },
+        *delProd({payload},{call,put,select}){
+            console.log(payload,'------------------------');
+            let result = yield DeleteProd (payload.id) 
+            console.log(result);
+            if(result){
+                message.success('删除成功');
+            }
+            // 从redux中拿到状态
+            const current=yield select(state=>state.prod.current)
+            const size=yield select(state=>state.prod.size)
+            console.log(current,size,'ppppppppppppppppppppp');
+            let res= yield getProd({
+                current,
+                size
+            });
+            if (res.records) {
+                yield put({
+                    type: 'save',
+                    payload: {
+                        records:res.records ,
+                        total:res.total
+                    }
+                })
+            }
+        },
+        *getEdit({payload},{call,put,select}){
+            // console.log(payload);
+            let result = yield getEdit(payload)
+            // console.log(result);
+            if(result){
+               yield put({
+                    type:'save',
+                    payload:{
+                        edit:result
+                    }
+               })
+            } 
+        },
+        *editProd({payload},{call,put,select}){
+            console.log(payload,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+            
         }
 
     },

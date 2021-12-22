@@ -1,4 +1,4 @@
-import { Iprod, Iaddprod } from '@/interfaces';
+import { Iprod, Iaddprod,Dprod,Eprod} from '@/interfaces';
 import { request } from 'umi';
 
 // 不验证传的参数的话，默认any
@@ -19,5 +19,27 @@ export function addProd(data: Iaddprod) {
             id:0,
             ...data
         }
+    })
+}
+
+// 删除
+export function DeleteProd(data:Dprod){
+    return request(`/prod/prodTag/${data}`,{
+        method:'DELETE',
+    })
+}
+
+// 回显数据
+export function getEdit(params:Dprod){
+    return request(`prod/prodTag/info/${params}`,{
+        meth:'GET',
+    })
+}
+
+// 编辑
+export function EditProd(data:Eprod){
+    return request('/prod/prodTag',{
+        method:'PUT',
+        data
     })
 }
