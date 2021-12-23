@@ -4,5 +4,7 @@ export * from './modules/sys'
 export * from './modules/hotSearch'
 export * from  './modules/prod'
 export * from './modules/member'
+export * from './modules/spec'
+export * from './modules/indexImg'
 export * from './modules/meun'
-
+export * from './modules/config'

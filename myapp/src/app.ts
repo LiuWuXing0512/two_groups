@@ -9,7 +9,7 @@ import { getToken } from './utils';
 // dva运行时配置
 export const dva = {
   config: {
-    // onAction: createLogger(),
+    onAction: createLogger(),
     onError(e: Error) {
       message.error(e.message, 3);
     },

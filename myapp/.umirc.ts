@@ -4,7 +4,7 @@ export default {
     dark: false,
     compact: true,
   },
-  // 配置代理
+  // 配置代理 本地代理获取远程的数据
   proxy: {
     '/api': {
       'target': 'http://82.156.36.178:8085',

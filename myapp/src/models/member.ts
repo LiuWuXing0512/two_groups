@@ -51,7 +51,6 @@ const MemberModel: MemberType = {
         },
         *getModal({userId},{call,put}){
             let result=yield getModal(userId)
-            console.log(result,'result,.......');
             if(result.userRegtime){
                 yield put({
                     type: 'save',
@@ -61,10 +60,10 @@ const MemberModel: MemberType = {
                 })
             }
         },
-        *changeStatus(payload,{call,put}){
+        *changeStatus({payload},{call,put}){
             console.log(payload,'userid。。。。。。。。。。');
-            // let result=yield changeStatus(payload)
-            // console.log(result,'result,.......');
+            let result=yield changeStatus(payload)
+            console.log(result,'result,.......');
         }
     },
 

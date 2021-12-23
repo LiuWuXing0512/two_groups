@@ -117,7 +117,7 @@ const HotSearchModel: HotSearchModelType = {
       yield posthotSearchSum(payload);
       // 从dva中拿到状态
       const state = yield select((state) => state.hotSearch);
-      const obj = {
+      const obj = { 
         current: state.current,
         size: state.size,
       };
