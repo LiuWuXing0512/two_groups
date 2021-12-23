@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Table, Input, Button, Tooltip, Space } from 'antd';
 import { SearchOutlined, DeleteOutlined, PlusOutlined, RedoOutlined, AppstoreFilled, EditOutlined } from '@ant-design/icons';
 import { connect, ConnectRC } from 'umi'
@@ -11,6 +11,7 @@ const columns: any = [   /**/
         title: '用户名',
         key: 'username',
         dataIndex: 'username',
+        render: (text: string) => <a>{text}</a>,
     },
     {
         title: '邮箱',
@@ -31,6 +32,9 @@ const columns: any = [   /**/
         title: '状态',
         key: 'status',
         dataIndex: 'status',
+        render: (text: number) => {
+            return <span>{text == 1 ? '正常' : '禁用'}</span>
+        }
     },
     {
         title: "操作",
@@ -51,15 +55,16 @@ const columns: any = [   /**/
     },
 ];
 
-
 interface Iuser {
     user: IPropsUser
 }
 
 
+
 const user: ConnectRC<any> = (props) => {
     const { records } = props.user.userList
     const [selectedRowKeys, setSelectedRowKeys] = useState(records)
+    const [text, updateText] = useState('')
     useEffect(() => {
         props.dispatch({
             type: "user/userList",
@@ -74,15 +79,21 @@ const user: ConnectRC<any> = (props) => {
         selectedRowKeys,
         onChange: onSelectChange,
     };
+    const hanldClick = () => {
+        props.dispatch({
+            type: "user/userList",
+            payload: { t: new Date().getTime(), current: 1, size: 10, username: text }
+        })
+    }
     return (
         <div className='user'>
             <div className='userSearch'>
                 <span>用户名&emsp;</span>
-                <Input placeholder='用户名' />&emsp;
-                <Button type="primary" icon={<SearchOutlined />}>
+                <Input placeholder='用户名' value={text} onChange={e => updateText(e.target.value)} />&emsp;
+                <Button type="primary" onClick={hanldClick} icon={<SearchOutlined />}>
                     搜索
                 </Button>&emsp;
-                <Button icon={<DeleteOutlined />} >
+                <Button onClick={() => updateText("")} icon={<DeleteOutlined />} >
                     清空
                 </Button>
             </div>

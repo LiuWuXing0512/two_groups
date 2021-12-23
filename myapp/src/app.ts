@@ -56,7 +56,7 @@ export const request: RequestConfig = {
 };
 
 // 修改根组件配置
-export function rootContainer(container) {
+export function rootContainer(container: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined) {
   return React.createElement('div', null, container, React.createElement(Loading));
 }
 
