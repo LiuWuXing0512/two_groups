@@ -1,5 +1,5 @@
 import React, { Dispatch, useEffect, useState } from 'react'
-import { ConnectRC, connect, useHistory } from 'umi';
+import { ConnectRC, connect } from 'umi';
 import styles from './prodList.less';
 import { Table, Button, Form, Input, Pagination, Tooltip, Select } from 'antd';
 import { IProdListItem,IProdData } from '@/interfaces/index'
@@ -130,9 +130,10 @@ const prodList: ConnectRC<IProps> = (props) => {
     ];
     const edit=(prodId)=>{
         editProdList(prodId)
+        props.history.push(`/prod/prodInfo?prodId=${prodId}`)
     }
     const del=()=>{
-        
+        console.log(props);
     }
     const add=()=>{
 
