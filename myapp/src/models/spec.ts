@@ -77,18 +77,6 @@ const SpecModel: SpecModelType = {
       };
     },
   },
-
-  // subscriptions: {
-  //   setup({ dispatch, history }) {
-  //     return history.listen(({ pathname }) => {
-  //       if (pathname === '/prod/spec') {
-  //         dispatch({
-  //           type: 'spec',
-  //         });
-  //       }
-  //     });
-  //   },
-  // },
 };
 
 export default SpecModel;
