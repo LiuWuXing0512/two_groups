@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from 'react';
+import React, { Dispatch, useState, useEffect } from 'react';
 import { ConnectRC, connect } from 'umi';
 import { Modal, Button, message, Form, Input, Checkbox } from 'antd';
 import { IConfigitem, ICon } from '@/interfaces';
@@ -7,10 +7,11 @@ interface IProps {
   getConfigAdd: (payload: IConfigitem) => void;
   getConfig: (payload: ICon) => void;
   id: number;
+  setflag(flag: boolean): void;
 }
 const ConfigModal = (props: any) => {
   console.log(props, 'zizujian...');
-  const { id } = props;
+  const { id, hasSelected } = props;
   const { paramKey, paramValue, remark } = props.editObj;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -18,10 +19,17 @@ const ConfigModal = (props: any) => {
   const [Attribute2, setInp2] = useState<string>('');
   const [Attribute3, setInp3] = useState<string>('');
 
-  const showModal = () => {
+  const showModal = (type) => {
     setIsModalVisible(true);
+    props.setflag(true);
   };
-
+    if( hasSelected){
+      console.log(121123);
+      
+      // setInp1(paramKey)
+      // setInp2(paramValue)
+      // setInp3(remark)]
+    }
   //弹框确认
   const handleOk = async () => {
     if (Attribute1 == '' || Attribute2 == '' || Attribute3 == '') {
@@ -34,6 +42,7 @@ const ConfigModal = (props: any) => {
       });
       message.success('添加成功');
       setIsModalVisible(false);
+      props.setflag(false);
       let payload = { current: 1, size: 10 };
       await props.getConfig(payload);
       setInp1('');
@@ -48,6 +57,7 @@ const ConfigModal = (props: any) => {
     setInp1('');
     setInp2('');
     setInp3('');
+    props.setflag(false);
   };
 
   const onFinish = (values: any) => {
@@ -74,7 +84,7 @@ const ConfigModal = (props: any) => {
 
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" onClick={()=>showModal('+')}>
         新增
       </Button>
       <Modal
@@ -125,7 +135,7 @@ const ConfigModal = (props: any) => {
           >
             <Input
               onChange={(e) => setValue3(e.target.value)}
-              value={id ? remark : Attribute3}
+              value={Attribute3}
               placeholder="备注"
             />
           </Form.Item>

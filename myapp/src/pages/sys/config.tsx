@@ -192,7 +192,7 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
 
       <div className={styles.crud__menu}>
         <div className={styles.crud_left}>
-          <ConfigModal id={id} setflag />
+          <ConfigModal id={id} setflag={setflag} hasSelected={hasSelected}/>
           &emsp;&emsp;
           <Button
             type="primary"
