@@ -166,7 +166,7 @@ const UserPage: ConnectRC<IProps> = (props) => {
                         </Select>
                     </Form.Item>
                     <Form.Item className={styles.operation} wrapperCol={{ offset: 8, span: 16 }}>
-                        <div className={styles.operation}>
+                        <div className={styles.operation}> 
                             <Button type="primary" htmlType="submit">
                                 搜索
                             </Button>
