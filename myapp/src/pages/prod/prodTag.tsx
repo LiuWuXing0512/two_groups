@@ -16,7 +16,7 @@ interface IProps {
     records: Record[],
     total: number,
     delProd: (payload: Dprod) => void,
-    getEdit: (payload: Dprod) => void,
+    getProdEdit: (payload: Dprod) => void,
     edititem: Eprod,
     editProd: (payload: Eprod) => void
 }
@@ -140,7 +140,7 @@ const prodTag: ConnectRC<IProps> = (props) => {
     //     console.log(forms.getFieldsValue);   
     // }
     const edit = async (id) => {
-        await props.getEdit(id)
+        await props.getProdEdit(id)
         setIsedittVisible(true);
     }
 
@@ -417,8 +417,8 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
             type: 'prod/delProd',
             payload
         }),
-        getEdit: (payload: Dprod) => dispatch({
-            type: 'prod/getEdit',
+        getProdEdit: (payload: Dprod) => dispatch({
+            type: 'prod/getProdEdit',
             payload
         }),
         editProd: (payload: Eprod) => dispatch({

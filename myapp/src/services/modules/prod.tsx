@@ -30,7 +30,7 @@ export function DeleteProd(data:Dprod){
 }
 
 // 回显数据
-export function getEdit(params:Dprod){
+export function getProdEdit(params:Dprod){
     return request(`prod/prodTag/info/${params}`,{
         meth:'GET',
     })

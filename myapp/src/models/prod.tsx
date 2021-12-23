@@ -1,5 +1,5 @@
 import { Record } from '@/interfaces'
-import { getProd,addProd,DeleteProd,getEdit,EditProd } from '@/services';
+import { getProd,addProd,DeleteProd,getProdEdit,EditProd } from '@/services';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 import { message} from 'antd';
   
@@ -20,7 +20,7 @@ export interface ProdModelType {
         getprod: Effect,
         addProd:Effect,
         delProd:Effect,
-        getEdit:Effect,
+        getProdEdit:Effect,
         editProd:Effect
     };
     reducers: {
@@ -91,9 +91,9 @@ const ProdModel: ProdModelType = {
                 })
             }
         },
-        *getEdit({payload},{call,put,select}){
+        *getProdEdit({payload},{call,put,select}){
             // console.log(payload);
-            let result = yield getEdit(payload)
+            let result = yield getProdEdit(payload)
             console.log('result...', result);
             if(result){
                yield put({
