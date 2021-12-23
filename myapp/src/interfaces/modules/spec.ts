@@ -1,10 +1,10 @@
 export interface ISpec {
-  current:number;
-  size:number;
-  propName?:string;
+  current: number;
+  size: number;
+  propName?: string;
 }
 
-export interface RootObj{
+export interface RootObj {
   records: Records[];
   total: number;
   size: number;
@@ -27,9 +27,6 @@ export interface ProdPropValues {
   propId?: any;
 }
 
-export interface IDel{
+export interface IDel {
   num: number;
 }
-
-// export interface IAdd{
-// }
