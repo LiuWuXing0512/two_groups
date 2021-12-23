@@ -1,69 +1,53 @@
 import React, { Dispatch, useEffect, useState } from 'react';
 import { ConnectRC, connect } from 'umi';
 import { Form, Radio, Input,Button } from 'antd';
-import { Iaddprod,Iprod } from '@/interfaces'
-import styles from './modal.less'
+import { Eprod } from '@/interfaces/index'
 
-interface IProps {
+interface IProps{
     handleCancel:()=>void,
-    handleOk:()=>void,
-    addProd:(payload:Iaddprod)=>void
-    getprod:(payload:Iprod)=>void
-    current:number,
-    size:number
+    edit:Eprod
 }
 
-const AddModal: ConnectRC<IProps> = (props) => {
-    
-    const { handleCancel,handleOk } =props
+const EditModal:ConnectRC<IProps>=(props)=>{
+    const [form] = Form.useForm();
+    const {handleCancel,edit}=props 
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        // 添加数据的请求
-        props.addProd({
-            title:values.title,
-            status:values.status,
-            style:values.status,
-            seq:values.seq
-        })
-        const { current , size }=props
-        // 添加完数据从新请求
-        props.getprod({
-            current,size
-        })
-        handleOk()
-        // 清空value的值
-       
     };
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
 
+    const edit=()=> {
+        Form.setFieldsValue(edit)
+    }
+    
     return (
         <div>
             <Form
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 16 }}
-                initialValues={{ remember: true }}
+                form={form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
                 labelAlign='right'
             >
-
+  
                 <Form.Item 
                     label="标签名字"
-                    name="title"
+                    name='title'
                     rules={[{ required: true, message: '标签名称不能为空' }]}
                 >
-                    <Input />
+                  <Input />
                 </Form.Item>
 
                 <Form.Item name="status" label="状态">
                     <Radio.Group>
-                        <Radio value={1}>正常</Radio>
-                        <Radio value={0}>禁用</Radio>
+                        <Radio value={0}>正常</Radio>
+                        <Radio value={1}>禁用</Radio>
                     </Radio.Group>
                 </Form.Item>
 
@@ -96,27 +80,18 @@ const AddModal: ConnectRC<IProps> = (props) => {
     )
 }
 
-const mapStateToProps = (state:any) => {
-    // console.log(state.prod,'=============================================');
-    return {
-        current:state.prod.current,
-        size:state.prod.size
+const mapStateToProps=(state:any)=>{
+    console.log(state.prod.edit,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    return{
+        edit:state.prod.edit,
+        
     }
+    
+    
 }
 
+const mapDispatchToProps=(dispatch:Dispatch<any>)=>{
 
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-    return {
-        addProd: (payload: Iaddprod) => dispatch({
-            type: 'prod/addProd',
-            payload
-        }),
-        getprod:(payload:Iprod)=>dispatch({
-            type:'prod/getprod',
-            payload
-        })
-
-    }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddModal)
+export default connect(mapStateToProps,mapDispatchToProps)(EditModal)

@@ -109,7 +109,6 @@ const HotSearch: ConnectRC<IProps> = (props) => {
   // 编辑
   const headleEdit = (item) => {
     console.log(item);
-
     setIsModalVisible(true);
     // 回显
     form.setFieldsValue(item);
