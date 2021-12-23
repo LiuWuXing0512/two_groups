@@ -7,3 +7,9 @@ export function getAreaList(data:Iarea) {
         params: data
     });
 }
+export function addArea(data:Iarea) {
+    return request('/admin/area', {
+        method: "POST",
+        data
+    });
+}

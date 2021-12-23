@@ -274,12 +274,12 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
         type: 'config/getConfig',
         payload,
       }),
-    getConfigDel: (payload: IDelt) =>
+    getConfigDel: (payload: number[]) =>
       dispatch({
         type: 'config/getConfigDel',
         payload,
       }),
-    getConfigId: (payload: IDelt) =>
+    getConfigId: (payload: number) =>
       dispatch({
         type: 'config/getConfigId',
         payload,

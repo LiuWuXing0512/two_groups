@@ -30,3 +30,20 @@ interface IMenuItem {
   orderNum: number;
   list?: any;
 }
+
+export interface ISysLogItem {
+  id: number;
+  username: string;
+  operation: string;
+  method: string;
+  params: string;
+  time: number;
+  ip: string;
+  createDate: string;
+}
+
+export interface ISysLogData {
+  t:number,
+  current:number,
+  size:number,
+}
