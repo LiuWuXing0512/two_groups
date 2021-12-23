@@ -1,14 +1,16 @@
 import React, { Dispatch, useEffect, useState } from 'react';
 import { ConnectRC, connect } from 'umi';
 import { Form, Radio, Input,Button } from 'antd';
+import { Eprod } from '@/interfaces/index'
 
 interface IProps{
     handleCancel:()=>void,
-    edit:Object
+    edit:Eprod
 }
 
 const EditModal:ConnectRC<IProps>=(props)=>{
-    const {handleCancel,edit}=props
+    const [form] = Form.useForm();
+    const {handleCancel,edit}=props 
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
@@ -18,25 +20,28 @@ const EditModal:ConnectRC<IProps>=(props)=>{
         console.log('Failed:', errorInfo);
     };
 
+    const edit=()=> {
+        Form.setFieldsValue(edit)
+    }
+    
     return (
         <div>
-            {{edit}}
             <Form
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 16 }}
-                initialValues={{ remember: true }}
+                form={form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
                 labelAlign='right'
             >
-
+  
                 <Form.Item 
                     label="标签名字"
-                    name="title"
+                    name='title'
                     rules={[{ required: true, message: '标签名称不能为空' }]}
                 >
-                    <Input />
+                  <Input />
                 </Form.Item>
 
                 <Form.Item name="status" label="状态">
@@ -76,9 +81,12 @@ const EditModal:ConnectRC<IProps>=(props)=>{
 }
 
 const mapStateToProps=(state:any)=>{
+    console.log(state.prod.edit,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
     return{
-        edit:state.prod.edit
+        edit:state.prod.edit,
+        
     }
+    
     
 }
 

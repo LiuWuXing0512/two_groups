@@ -62,8 +62,8 @@ const AddModal: ConnectRC<IProps> = (props) => {
 
                 <Form.Item name="status" label="状态">
                     <Radio.Group>
-                        <Radio value={0}>正常</Radio>
-                        <Radio value={1}>禁用</Radio>
+                        <Radio value={1}>正常</Radio>
+                        <Radio value={0}>禁用</Radio>
                     </Radio.Group>
                 </Form.Item>
 
