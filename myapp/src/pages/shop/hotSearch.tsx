@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   Space,
+  Transfer,
   Radio,
   InputNumber,
 } from 'antd';
@@ -48,43 +49,17 @@ const HotSearch: ConnectRC<IProps> = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
   const [modal, setModal] = useState<boolean>(false);
   const [editStatus, setEditStatus] = useState<number>(0);
-  const columns = [
-    {
-      title: '热搜标题',
-      dataIndex: 'title',
-    },
-    {
-      title: '热搜内容',
-      dataIndex: 'content',
-    },
-    {
-      title: '录入时间',
-      dataIndex: 'recDate',
-      sorter: (a: { recDate: number }, b: { recDate: number }) =>
-        a.recDate - b.recDate,
-    },
-    {
-      title: '顺序',
-      dataIndex: 'seq',
-      sorter: (a: { seq: number }, b: { seq: number }) => a.seq - b.seq,
-    },
-    {
-      title: 'status' ? '启用' : '未启用',
-      dataIndex: 'status',
-      render: (text: any) => {
-        return (
-          <span className={text ? 'start' : 'noStart'}>
-            {text ? '启用' : '未启用'}
-          </span>
-        );
-      },
-    },
+  const operator = [
     {
       title: '操作',
       render: (record: { hotSearchId: React.Key | null | undefined }) => {
         return (
           <div>
-            <Button type="primary" onClick={() => headleEdit(record)}>
+            <Button
+              style={{ marginRight: '5px' }}
+              type="primary"
+              onClick={() => headleEdit(record)}
+            >
               <EditOutlined />
               编辑
             </Button>
@@ -100,7 +75,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
         );
       },
     },
-  ];
+  ]
   useEffect(() => {
     props.hotSearchList();
   }, []);
@@ -117,12 +92,11 @@ const HotSearch: ConnectRC<IProps> = (props) => {
     props.hotSearchSum(info);
   };
   // 多选
-  const onChangeCheck = (
-    selectedRowKeys: number[] | string[],
-    selectedRows: IRecordsItem[],
-  ) => {
+  const onChangeCheck = (selectedRowKeys: number[]) => {
+    console.log(selectedRowKeys, 'selectedRows...124');
+
     setSelectedRowKeys(selectedRowKeys as number[]);
-    setDisabled(!selectedRows.length);
+    setDisabled(!selectedRowKeys.length);
   };
 
   const validatePrimeNumber = (number: number) => {
@@ -156,7 +130,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
     };
     props.puthotSearchSum(obj);
   };
-
+  // 取消
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -168,13 +142,13 @@ const HotSearch: ConnectRC<IProps> = (props) => {
       setLoading(false);
     }, 1000);
   };
-
+  // 顺序数据
   const [number, setNumber] = useState<{
     value: number;
   }>({
     value: 11,
   });
-
+  // 加减顺序
   const onNumberChange = (value: number) => {
     setNumber({
       value,
@@ -183,18 +157,39 @@ const HotSearch: ConnectRC<IProps> = (props) => {
 
   const rowSelection = {
     onChange: onChangeCheck,
+    selectedRowKeys,
   };
-
+  // 取消modal一切操作
   const HandleCancel = () => {
     setModal(false);
   };
+  // 关闭modal
   const headleModal = () => {
     setModal(false);
   };
-
+  // 编辑 radio选项
   const onChangeEdit = (e) => {
     console.log('radio checked', e.target.value);
     setEditStatus(e.target.value);
+  };
+
+  const [transfer, setTransfer] = useState<boolean>(false);
+  const [columnsData,seColumnsData] = useState(columns)
+  const [targetKeys, setTargetKeys] = useState<string[]>([]);
+  const [TargetselectedKeys, setTargetSelectedKeys] = useState<string[]>([]);
+  useEffect(() => {
+    setTargetKeys(columnsData.map(v=>v.key))
+  }, []);
+  const onTargetChange = (nextTargetKeys, direction, moveKeys) => {
+    setTargetKeys(nextTargetKeys);
+    seColumnsData(columns.filter(v=>nextTargetKeys.indexOf(v.key)!==-1));
+    // const item=
+    // console.log(item,'189');
+    
+  };
+
+  const onTargetSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
+    setTargetSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
   return (
@@ -252,6 +247,7 @@ const HotSearch: ConnectRC<IProps> = (props) => {
         <div className={styles.mainTop}>
           <div className="topLeft">
             <Button
+              style={{ marginRight: '10px' }}
               type="primary"
               onClick={() => {
                 setModal(true);
@@ -276,7 +272,13 @@ const HotSearch: ConnectRC<IProps> = (props) => {
                 <SyncOutlined />
               </Button>
             </Tooltip>
-            <Tooltip placement="top" title="显隐">
+            <Tooltip
+              placement="top"
+              onClick={() => {
+                setTransfer(!transfer);
+              }}
+              title="显隐"
+            >
               <Button>
                 <AppstoreOutlined />
               </Button>
@@ -290,13 +292,38 @@ const HotSearch: ConnectRC<IProps> = (props) => {
         </div>
       </div>
       <div className="bottom">
+        <Modal
+          title="多选"
+          footer={null}
+          visible={transfer}
+          onOk={()=>setTransfer(!transfer)}
+          onCancel={()=>setTransfer(!transfer)}
+        >
+          <Transfer
+            dataSource={columns}
+            titles={['隐藏', '显示']}
+            targetKeys={targetKeys}
+            selectedKeys={TargetselectedKeys}
+            onChange={(onTargetChange)}
+            onSelectChange={onTargetSelectChange}
+            render={(item) => item.title}
+          />
+        </Modal>
+        <div style={{ margin: '10px 0' }}>
+          <span style={{ marginRight: '10px' }}>
+            当前表格已选择 {selectedRowKeys.length} 项
+          </span>
+          <span style={{ color: 'blue' }} onClick={() => onChangeCheck([])}>
+            清空
+          </span>
+        </div>
         <Table
           rowSelection={{
             type: 'checkbox',
             ...rowSelection,
           }}
           rowKey={'hotSearchId'}
-          columns={columns}
+          columns={[...columnsData,...operator]}
           loading={loading}
           dataSource={props.records}
           pagination={false}
@@ -317,6 +344,45 @@ const HotSearch: ConnectRC<IProps> = (props) => {
     </div>
   );
 };
+
+const columns = [
+  {
+    title: '热搜标题',
+    dataIndex: 'title',
+    key: 'title',
+  },
+  {
+    title: '热搜内容',
+    dataIndex: 'content',
+    key: 'content',
+  },
+  {
+    title: '录入时间',
+    dataIndex: 'recDate',
+    key: 'recDate',
+    sorter: (a: { recDate: number }, b: { recDate: number }) =>
+      a.recDate - b.recDate,
+  },
+  {
+    title: '顺序',
+    dataIndex: 'seq',
+    key: 'seq',
+    sorter: (a: { seq: number }, b: { seq: number }) => a.seq - b.seq,
+  },
+  {
+    title: 'status' ? '启用' : '未启用',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text: any) => {
+      return (
+        <span className={text ? 'start' : 'noStart'}>
+          {text ? '启用' : '未启用'}
+        </span>
+      );
+    },
+  },
+
+];
 
 const layout = {
   labelCol: { span: 10 },
