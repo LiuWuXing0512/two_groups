@@ -14,7 +14,7 @@ const columns = [
     { title: '类型', dataIndex: 'type', key: 'type' },
     { title: '排序号', dataIndex: 'orderNum', key: 'xu' },
     { title: '菜单URL', dataIndex: 'url', key: 'url' },
-    { title: '授权标识', dataIndex: 'perms', key: 'flag' },
+    { title: '授权标识', dataIndex: 'perms', key: 'flag' , width:150},
     {
         title: '操作',
         key: 'action',

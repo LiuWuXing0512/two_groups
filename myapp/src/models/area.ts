@@ -7,12 +7,12 @@ let list: Array<IaddressList> = [];
 const addressFilter = (addressList: IaddressList, parentId: number) => {
   if (parentId === 0) {
     list = addressList.filter(item => item.parentId === parentId)
-    list.map(item => Object.defineProperty(item, 'children', { value: addressFilter(addressList, item.areaId), writable: true }));
+    list.map(item => item.children = addressFilter(addressList, item.areaId));
     return list;
   } else {
     list.map(item => {
       if (item.children) {
-        return item.children.map(items => Object.defineProperty(items, 'children', { value: addressList.filter(level3 => level3.parentId === items.areaId), writable: true }))
+        return item.children.map(items => items.children = addressList.filter(level3 => level3.parentId === items.areaId))
       }
     })
     return addressList.filter(item => item.parentId === parentId)
