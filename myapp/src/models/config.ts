@@ -1,5 +1,5 @@
 import { IConfigitem, IConfig } from '@/interfaces';
-import { getConfig, getConfigDel, getConfigAdd, getConfigId } from '@/services';
+import { getConfig, getConfigDel, getConfigAdd, getConfigId,getConfigTj } from '@/services';
 import { Effect, ImmerReducer, Reducer, Subscription } from 'umi';
 
 // 模块内部state接口
@@ -17,6 +17,7 @@ export interface ConfigModelType {
     getConfigDel: Effect;
     getConfigAdd: Effect;
     getConfigId: Effect;
+    getConfigTj: Effect;
   };
   reducers: {
     // 启用 immer 之后
@@ -64,6 +65,10 @@ const ConfigModel: ConfigModelType = {
         // payload: result,
         payload: { editObj: result },
       });
+    },
+    *getConfigTj({ payload }, { call, put, select }) {
+      const result = yield getConfigTj(payload);
+      console.log(result);
     },
   },
 

@@ -12,6 +12,7 @@ import styles from './spec.less';
 const { Column } = Table;
 import ModalTab from '../../components/spec/index';
 import Edits from '../../components/spec/edit';
+import UserModal from '@/components/usermodal/index';
 
 interface IProps {
   getSpec: (payload: ISpec) => void;
@@ -24,6 +25,12 @@ interface IProps {
   pageSize: number;
   ProdPropValue: ProdPropValues[];
 }
+
+interface markRule {
+  key: string;
+  title: string;
+}
+
 const SpecPage: ConnectRC<IProps> = (props) => {
   const { records, total } = props;
   console.log(props, 'props...');
@@ -32,7 +39,11 @@ const SpecPage: ConnectRC<IProps> = (props) => {
   const [value, search] = useState<string>('');
   const [flag, setflag] = useState<boolean>(false);
   const [editflag, setedit] = useState<boolean>(false);
-
+  const [array, setColumns] = useState<object[]>(records);
+  const qwe: markRule[] = [
+    { key: '1', title: '属性名称' },
+    { key: '2', title: '属性值' },
+  ];
   // 定义生命周期
   useEffect(() => {
     let payload = { current: 1, size: 10 };
@@ -136,7 +147,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
             icon={<SyncOutlined />}
             onClick={() => renovate()}
           />
-          <Button className={styles.Button} icon={<AppstoreOutlined />} />
+          <UserModal coum={records} setColumns={setColumns} mockData={qwe} />
           <Tooltip title="搜索">
             <Button
               className={styles.Button}
@@ -160,7 +171,7 @@ const SpecPage: ConnectRC<IProps> = (props) => {
           <Column
             align="center"
             title="序号"
-            dataIndex="propId"
+            dataIndex="index"
             key="firstName"
           />
           <Column
