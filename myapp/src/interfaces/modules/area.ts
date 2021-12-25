@@ -1,7 +1,7 @@
 export interface Iarea {
-    current: number;
-    size: number;
-    t: number;
+    current?: number;
+    size?: number;
+    t?: number;
     areaId?: number,
     areaName?: string,
     parentId?: number,

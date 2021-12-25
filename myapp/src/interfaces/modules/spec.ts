@@ -11,6 +11,8 @@ export interface RootObj {
   current: number;
   searchCount: boolean;
   pages: number;
+  key?: string;
+  title: string;
 }
 
 export interface Records {

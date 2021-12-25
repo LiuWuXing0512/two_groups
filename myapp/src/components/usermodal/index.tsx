@@ -6,9 +6,9 @@ interface Markdata {
     title:string
 }
 interface Columns {
-    key:string,
-    title: string,
-    dataIndex: string,
+    key?:string,
+    title?: string,
+    dataIndex?: string,
     align?:string,
     width?:number,
     fixed?:string,

@@ -25,3 +25,12 @@ export function getConfigId(id) {
     method: 'get',
   });
 }
+
+
+export function getConfigTj(data:IConfigitem) {
+  return request(`/sys/config`, {
+    method: 'put',
+    data
+  });
+}
+

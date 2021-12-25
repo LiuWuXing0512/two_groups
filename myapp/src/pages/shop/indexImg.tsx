@@ -19,6 +19,9 @@ const IndexImg: ConnectRC<IProps> = (props) => {
       </Select>
     </Form.Item>
   </div>);
+  return <div className="indexImg">
+111
+  </div>;
 };
 
 const mapStateToProps = ({ indexImg }) => {
