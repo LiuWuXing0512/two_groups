@@ -128,15 +128,15 @@ const prodList: ConnectRC<IProps> = (props) => {
             title: '状态',
         }
     ];
-    const edit=(prodId)=>{
-        editProdList(prodId)
+    const edit=async (prodId)=>{
+        await editProdList(prodId)
         props.history.push(`/prod/prodInfo?prodId=${prodId}`)
     }
     const del=()=>{
         console.log(props);
     }
     const add=()=>{
-
+        props.history.push(`/prod/prodInfo`)
     }
     const alldel=()=>{
         

@@ -16,7 +16,7 @@ interface Markdata {
     title: string
 }
 const Syslog: ConnectRC<IProps> = (props) => {
-    const { syslogList, syslogpages, syslogtotal } = props
+    const { syslogList, syslogtotal } = props
     const [current] = useState<number>(1)
     const [username, setusername] = useState<string>('')
     const [operation, setoperation] = useState<string>('')
