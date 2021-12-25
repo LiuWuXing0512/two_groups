@@ -67,7 +67,6 @@ const ProdModel: ProdModelType = {
             }
         },
         *delProd({payload},{call,put,select}){
-            // console.log(payload,'------------------------');
             let result = yield DeleteProd (payload.id) 
             console.log(result);
             if(result){
@@ -76,7 +75,6 @@ const ProdModel: ProdModelType = {
             // 从redux中拿到状态
             const current=yield select(state=>state.prod.current)
             const size=yield select(state=>state.prod.size)
-            // console.log(current,size,'ppppppppppppppppppppp');
             let res= yield getProd({
                 current,
                 size
@@ -105,10 +103,9 @@ const ProdModel: ProdModelType = {
             } 
         },
         *editProd({payload},{call,put,select}){
-            console.log(payload,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+            // console.log(payload);
             let result=yield EditProd (payload)
             console.log(result);
-            
             
         }
 

@@ -50,16 +50,16 @@ const UserModal = (props:IProps) => {
         console.log('targetSelectedKeys:', targetSelectedKeys);
         setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
     };
-    const onScroll = (direction, e) => {
-        console.log('direction:', direction);
-        console.log('target:', e.target);
-    };
+    // const onScroll = (direction, e) => {
+    //     console.log('direction:', direction);
+    //     console.log('target:', e.target);
+    // };
     return (
         <div>
             <Tooltip title="显隐">
                 <Button shape="circle" onClick={showModal} icon={<AppstoreOutlined />} />
             </Tooltip>
-            <Modal title="多选" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="多选" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null}>
                 <Transfer
                     dataSource={mockData}
                     targetKeys={targetKeys}
@@ -67,7 +67,7 @@ const UserModal = (props:IProps) => {
                     titles={['显示','隐藏']}
                     onChange={onChange}
                     onSelectChange={onSelectChange}
-                    onScroll={onScroll}
+                    // onScroll={onScroll}
                     render={item => item.title}
                 />
             </Modal>

@@ -42,7 +42,7 @@ const IndexImgModel: IndexImgModelType = {
         yield put({
             type: 'save',
             payload: result,
-          });
+        });
     }
   }, 
 

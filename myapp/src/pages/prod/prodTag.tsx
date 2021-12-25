@@ -8,6 +8,8 @@ import { DeleteOutlined, SearchOutlined, AppstoreAddOutlined, SyncOutlined, Edit
 // 引入封装的组件
 import AddModal from '@/components/prod/modal'
 // import EditModal from '@/components/prod/edit'
+// 引入穿梭框
+import UserModal from '@/components/usermodal/index'
 
 
 // 验证mapDispatchToProps，mapStateToProps的接口
@@ -21,6 +23,11 @@ interface IProps {
     editProd: (payload: Eprod) => void
 }
 
+interface Markdata{
+    key:string,
+    title:string
+}
+
 const prodTag: ConnectRC<IProps> = (props) => {
     // 定义状态
     const [flag, setflag] = useState<Boolean>(true);
@@ -31,7 +38,6 @@ const prodTag: ConnectRC<IProps> = (props) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isdelectVisible, setIsdelectVisible] = useState(false)
     const [iseditVisible, setIsedittVisible] = useState(false)
-    const [ischoseVisible, setIschoseVisible] = useState(false)
     // 删除存id
     const [delid, setid] = useState(0)
 
@@ -86,26 +92,26 @@ const prodTag: ConnectRC<IProps> = (props) => {
         {
             title: '标签名称',
             dataIndex: 'title',
-            key: 'title',
+            key: '1',
             align: 'center' as 'center'
         },
         {
             title: '状态',
             dataIndex: 'status',
-            key: 'status',
+            key: '2',
             align: 'center' as 'center',
             render: (status: number) => (<Tag color={status ? 'processing' : 'error'}>{status ? '正常' : '禁止'}</Tag>)
         },
         {
             title: '默认类型',
-            key: 'isDefault',
+            key: '3',
             dataIndex: 'isDefault',
             align: 'center' as 'center',
             render: (isDefault: number) => (<Tag color="blue">{isDefault ? '默认类型' : '自定义类型'}</Tag>)
         },
         {
             title: '排序',
-            key: 'seq',
+            key: '4',
             dataIndex: 'seq',
             align: 'center' as 'center'
         },
@@ -127,6 +133,28 @@ const prodTag: ConnectRC<IProps> = (props) => {
             ),
         }
     ];
+
+    // 穿梭框里显示的内容
+    const mockData: Markdata[] = [
+        {
+            key: '1',
+            title: '标签名称',
+        },
+        {
+            key: '2',
+            title: '状态',
+        },
+        {
+            key: '3',
+            title: '默认类型',
+        },
+        {
+            key: '4',
+            title: '排序',
+        },
+    ];
+    // 穿梭的方法
+    const [colum ,setcolumns]=useState<Object[]>(columns)
 
     // 新增
     const showModal = () => {
@@ -153,7 +181,6 @@ const prodTag: ConnectRC<IProps> = (props) => {
         setIsdelectVisible(true)
         setid(id)
     }
-
 
     //点击搜索按钮，搜索组件显示隐藏
     const hiddeForm = () => {
@@ -184,8 +211,6 @@ const prodTag: ConnectRC<IProps> = (props) => {
         setIsdelectVisible(false);
         // 编辑
         setIsedittVisible(false);
-        // 显隐
-        setIschoseVisible(false)
     };
 
     const onOk = () => {
@@ -207,10 +232,6 @@ const prodTag: ConnectRC<IProps> = (props) => {
             size: pageSize,
         })
 
-    }
-
-    const Chose = () => {
-        setIschoseVisible(true)
     }
 
     // 修改完成后，打印修改的数据
@@ -268,17 +289,22 @@ const prodTag: ConnectRC<IProps> = (props) => {
         <div className={styles.opt}>
             {/* 新增 一系列操作*/}
             <Button type="primary" style={{ marginBottom: 8 + 'px' }} onClick={showModal}>+ 新增</Button>
-            <div>
+            <div className={styles.prodbtn}>
                 <Tooltip title="刷新">
                     <Button shape="circle" icon={<SyncOutlined />} style={{ marginRight: 8 + 'px' }} />
                 </Tooltip>
 
-                <Tooltip title="显隐">
+                {/* <Tooltip title="显隐">
                     <Button shape="circle" icon={<AppstoreAddOutlined />} style={{ marginRight: 8 + 'px' }} onClick={Chose} />
-                </Tooltip>
+                </Tooltip> */}
+                <UserModal 
+                    mockData={mockData}
+                    setcolumns={setcolumns}
+                    coum={columns}
+                />
 
                 <Tooltip title="搜索">
-                    <Button shape="circle" icon={<SearchOutlined />} style={{ marginRight: 8 + 'px' }} onClick={hiddeForm} />
+                    <Button shape="circle" icon={<SearchOutlined />} style={{ marginRight: 8 + 'px',marginLeft:'8px' }} onClick={hiddeForm} />
                 </Tooltip>
             </div>
 
@@ -286,7 +312,7 @@ const prodTag: ConnectRC<IProps> = (props) => {
 
 
         {/* 表格 */}
-        <Table bordered={true} columns={columns} dataSource={records} pagination={false} rowKey='id' />
+        <Table bordered={true} columns={colum} dataSource={records} pagination={false} rowKey='id' />
 
         {/* 分页 */}
         <Pagination
@@ -383,17 +409,6 @@ const prodTag: ConnectRC<IProps> = (props) => {
             <Alert message="确定进行删除操作" banner />
 
         </Modal>
-
-        {/* 点击显隐藏，出现弹框 */}
-        <Modal title="多 选"
-            width={'50%'}
-            visible={ischoseVisible}
-            onCancel={handleCancel}
-            footer={null}
-        >
-
-        </Modal>
-
 
     </div>)
 }
