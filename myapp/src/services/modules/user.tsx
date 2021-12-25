@@ -20,3 +20,15 @@ export function roleList(data: ILoginForm) {
         params: data
     });
 }
+export function addUser(data: ILoginForm) {
+    return request('/sys/user', {
+        method: "POST",
+        data
+    });
+}
+export function delUser(data: ILoginForm) {
+    return request('/sys/user', {
+        method: "DELETE",
+        data
+    });
+}
