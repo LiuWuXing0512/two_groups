@@ -1,42 +1,28 @@
 import React, { Dispatch, useEffect, useState } from 'react'
 import { ConnectRC, connect } from 'umi';
-import { Form, Input, Button, Upload, Radio, Select, Menu, Dropdown, Space, Checkbox  } from 'antd';
+import { Form, Input, Button, Upload, Radio, Select, Menu, Dropdown, Space, Checkbox } from 'antd';
 import ImgCrop from 'antd-img-crop';
+import { IProdListItem } from '@/interfaces/index'
 
+interface IProps {
+    editproddetail: IProdListItem,
+}
 interface imgUpload {
     uid: string,
-    name: string,
-    status: string,
-    url: string
+    url: string,
+    name:string
 }
-const prodInfo = (props) => {
+const prodInfo: ConnectRC<IProps> = (props) => {
     let { editproddetail } = props
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
-    };
-    const [fileList, setFileList] = useState<string[]>([]);
+    const [fileList, setFileList] = useState<imgUpload[]>([]);
     const [value, setValue] = React.useState(1);
     const { Option } = Select;
     const plainOptions = ['Apple', 'Pear', 'Orange'];
-    const menu = (
-        <Menu>
-          <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer">
-              1st menu item
-            </a>
-          </Menu.Item>
-          <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer">
-              2nd menu item
-            </a>
-          </Menu.Item>
-          <Menu.Item>
-            <a target="_blank" rel="noopener noreferrer">
-              3rd menu item
-            </a>
-          </Menu.Item>
-        </Menu>
-      );
+    const [prodObj, setprodObj] = useState<IProdListItem>(editproddetail)
+    const onFinish = (values: any) => {
+        console.log('Success:', values);
+        console.log(prodObj);
+    };
     const ChangeRadio = e => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
@@ -65,8 +51,20 @@ const prodInfo = (props) => {
 
     };
     useEffect(() => {
-        console.log(editproddetail);
-        console.log(props.location.query.prodId);
+        // console.log(editproddetail);
+        console.log(Object.keys(props.location.query).length);
+        let arr:imgUpload[]=[]
+        if(prodObj.imgs){
+            prodObj.imgs.split(',').forEach((item,index)=>{
+                let obj={uid:`${index}`,url:item,name:`${index}`}
+                arr.push(obj)
+            })
+        }
+        setFileList(arr)
+        if (!Object.keys(props.location.query).length) {
+            setprodObj({} as IProdListItem)
+        }
+
     }, [])
     return (
         <div>
@@ -80,20 +78,21 @@ const prodInfo = (props) => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="Username"
+                    label="产品图片"
                     name="username"
                 >
                     <ImgCrop rotate>
                         <Upload
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            action="http://mall.api.jasonandjay.com/admin/file/upload/element"
                             listType="picture-card"
+                            method='POST'
                             fileList={fileList}
                             onChange={onChange}
                             onPreview={onPreview}
                         >
                             {fileList.length < 5 && '+ Upload'}
                         </Upload>
-                   i </ImgCrop>
+                        i </ImgCrop>
                 </Form.Item>
                 <Form.Item
                     label="状态"
@@ -120,9 +119,12 @@ const prodInfo = (props) => {
                     label="产品分组"
                     name="password"
                 >
-                    <Dropdown overlay={menu} placement="topCenter">
-                        <Button>topCenter</Button>
-                    </Dropdown>
+                    <Input.Group compact>
+                        <Select defaultValue="Option1" style={{ width: '50%' }}>
+                            <Option value="Option1">Option1</Option>
+                            <Option value="Option2">Option2</Option>
+                        </Select>
+                    </Input.Group>
                 </Form.Item>
                 <Form.Item
                     label="产品名称"
@@ -132,9 +134,9 @@ const prodInfo = (props) => {
                 </Form.Item>
                 <Form.Item
                     label="产品卖点"
-                    name="password"
+                    name="brief"
                 >
-                    <textarea name="" id="" cols={30} rows={2}></textarea>
+                    <textarea name="" id="" value={editproddetail.brief} cols={30} rows={2}></textarea>
                 </Form.Item>
                 <Form.Item
                     label="配送方式"
@@ -146,9 +148,12 @@ const prodInfo = (props) => {
                     label="运费设置"
                     name="password"
                 >
-                    <Dropdown overlay={menu} placement="bottomCenter">
-                        <Button>bottomCenter</Button>
-                    </Dropdown>
+                    <Input.Group compact>
+                        <Select defaultValue={prodObj.deliveryTemplateId} style={{ width: '50%' }}>
+                            <Option value="Option1">Option1</Option>
+                            <Option value="Option2">Option2</Option>
+                        </Select>
+                    </Input.Group>
                 </Form.Item>
                 <Form.Item
                     label="商品规格"
