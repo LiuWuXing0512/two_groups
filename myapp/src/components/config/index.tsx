@@ -8,10 +8,11 @@ interface IProps {
   getConfig: (payload: ICon) => void;
   id: number;
   setflag(flag: boolean): void;
+  // edit: () => void;
 }
 const ConfigModal = (props: any) => {
   console.log(props, 'zizujian...');
-  const { id, hasSelected } = props;
+  const { id, hasSelected, edit } = props;
   const { paramKey, paramValue, remark } = props.editObj;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -19,44 +20,58 @@ const ConfigModal = (props: any) => {
   const [Attribute2, setInp2] = useState<string>('');
   const [Attribute3, setInp3] = useState<string>('');
 
-  const showModal = (type) => {
+  const showModal = () => {
     setIsModalVisible(true);
     props.setflag(true);
+    setInp1('');
+    setInp2('');
+    setInp3('');
   };
-    if( hasSelected){
-      console.log(121123);
-      
-      // setInp1(paramKey)
-      // setInp2(paramValue)
-      // setInp3(remark)]
-    }
+  
   //弹框确认
   const handleOk = async () => {
-    if (Attribute1 == '' || Attribute2 == '' || Attribute3 == '') {
-      message.error('添加失败');
+    if (!hasSelected) {
+      if (Attribute1 == '' || Attribute2 == '' || Attribute3 == '') {
+        message.error('添加失败');
+      } else {
+        await props.getConfigAdd({
+          paramKey: Attribute1,
+          paramValue: Attribute2,
+          remark: Attribute3,
+        });
+        message.success('添加成功');
+        setIsModalVisible(false);
+        props.setflag(false);
+        setInp1('');
+        setInp2('');
+        setInp3('');
+        let payload = { current: 1, size: 10 };
+        await props.getConfig(payload);
+      }
     } else {
-      await props.getConfigAdd({
+      await props.getConfigTj({
+        id: id,
         paramKey: Attribute1,
         paramValue: Attribute2,
         remark: Attribute3,
       });
-      message.success('添加成功');
+      message.success('修改成功');
       setIsModalVisible(false);
       props.setflag(false);
-      let payload = { current: 1, size: 10 };
-      await props.getConfig(payload);
       setInp1('');
       setInp2('');
       setInp3('');
+      let payload = { current: 1, size: 10 };
+      await props.getConfig(payload);
     }
   };
 
   //弹框关闭
   const handleCancel = () => {
-    setIsModalVisible(false);
     setInp1('');
     setInp2('');
     setInp3('');
+    setIsModalVisible(false);
     props.setflag(false);
   };
 
@@ -71,7 +86,7 @@ const ConfigModal = (props: any) => {
   //输入框
   const setValue1 = (value) => {
     setInp1(value);
-    console.log(paramKey, '参数名');
+    console.log(value, '参数名');
   };
 
   const setValue2 = (value) => {
@@ -84,13 +99,13 @@ const ConfigModal = (props: any) => {
 
   return (
     <div>
-      <Button type="primary" onClick={()=>showModal('+')}>
+      <Button type="primary" onClick={() => showModal()}>
         新增
       </Button>
       <Modal
         title={id ? '修改' : '新增'}
         width="700px"
-        visible={id ? props.hasSelected : isModalVisible}
+        visible={id ? hasSelected : isModalVisible}
         okText="确定"
         onOk={handleOk}
         onCancel={handleCancel}
@@ -100,15 +115,13 @@ const ConfigModal = (props: any) => {
           name="basic"
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
-          initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          autoComplete="off"
         >
           <Form.Item
             label="参数名"
             name="paramKey"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ message: 'Please input your username!' }]}
           >
             <Input
               onChange={(e) => setValue1(e.target.value)}
@@ -163,6 +176,11 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     getConfig: (payload: ICon) =>
       dispatch({
         type: 'config/getConfig',
+        payload,
+      }),
+    getConfigTj: (payload: IConfigitem) =>
+      dispatch({
+        type: 'config/getConfigTj',
         payload,
       }),
   };

@@ -19,6 +19,7 @@ import {
 7;
 import styles from '../prod/spec.less';
 import ConfigModal from '@/components/config/index';
+import UserModal from '@/components/usermodal/index';
 
 interface IProps {
   getConfig: (payload: ICon) => void;
@@ -27,6 +28,10 @@ interface IProps {
   total: number;
   getPage: (payload: ICon) => void;
   getConfigId: (payload: number) => void;
+}
+interface markRule {
+  key:string;
+  title:string;
 }
 const ConfigPage: ConnectRC<IProps> = (props) => {
   const { data, total } = props;
@@ -44,6 +49,8 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
   useEffect(() => {
     props.getConfig({ current: 1, size: 10 });
   }, []);
+
+  const qwe:markRule[]=[{key:'1',title:'参数名'},{key:'2',title:'参数值'},{key:'3',title:'备注'}]
 
   //搜索数据
   const dj = () => {
@@ -85,12 +92,10 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
   };
 
   //编辑
-  const edit = (id) => {
+  const edit = async (id) => {
     setId(id);
     setflag(true);
-    console.log(id);
-    console.log('编辑');
-    props.getConfigId(id);
+    await props.getConfigId(id);
   };
 
   //清空
@@ -117,26 +122,31 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
 
   const columns = [
     {
+      key:'1',
       title: '序号',
       dataIndex: 'id',
       align: 'center',
     },
     {
+      key:'2',
       title: '参数名',
       dataIndex: 'paramKey',
       align: 'center',
     },
     {
+      key:'3',
       title: '参数值',
       dataIndex: 'paramValue',
       align: 'center',
     },
     {
+      key:'4',
       title: '备注',
       dataIndex: 'remark',
       align: 'center',
     },
     {
+      key:'5',
       title: '操作',
       align: 'center',
       dataIndex: 'id',
@@ -154,6 +164,7 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
       ),
     },
   ];
+  const [array, setColumns] = useState<object[]>(columns);
 
   // render内容
   return (
@@ -192,7 +203,12 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
 
       <div className={styles.crud__menu}>
         <div className={styles.crud_left}>
-          <ConfigModal id={id} setflag={setflag} hasSelected={hasSelected}/>
+          <ConfigModal
+            id={id}
+            edit={edit}
+            setflag={setflag}
+            hasSelected={hasSelected}
+          />
           &emsp;&emsp;
           <Button
             type="primary"
@@ -209,7 +225,7 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
             icon={<SyncOutlined />}
             onClick={() => renovate()}
           />
-          <Button className={styles.Button} icon={<AppstoreOutlined />} />
+          <UserModal coum={columns} setcolumns={setColumns} mockData={qwe} />
           <Tooltip title="搜索">
             <Button
               className={styles.Button}
@@ -225,6 +241,7 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
 
       <div className="main">
         <div>
+          {/* <ConfigEdit/> */}
           <div style={{ marginBottom: 16 }}>
             <div className={styles.header}>
               <span>当前表格已选 {num} 项</span>
@@ -243,7 +260,7 @@ const ConfigPage: ConnectRC<IProps> = (props) => {
             }}
             dataSource={data}
             pagination={false}
-            columns={columns}
+            columns={array}
           ></Table>
         </div>
         {/* 分页 */}
