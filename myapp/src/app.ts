@@ -9,7 +9,7 @@ import { getToken } from './utils';
 // dva运行时配置
 export const dva = {
   config: {
-    onAction: createLogger(),
+    // onAction: createLogger(),
     onError(e: Error) {
       message.error(e.message, 3);
     },
@@ -38,6 +38,7 @@ export const request: RequestConfig = {
   }],
   // 响应拦截器
   responseInterceptors: [response => {
+    
     const codeMaps: { [key: string]: string } = {
       400: '请求出错',
       401: '请求未被授权',

@@ -51,6 +51,8 @@ const UserModel: MenuModelType = {
     effects: {
         *meunTable({ payload }, { put }) {
             let result = yield meunTable(payload);
+            console.log(menuListFilter(result, 0));
+            
             yield put({
                 type: 'getMenuList',
                 payload: menuListFilter(result, 0)

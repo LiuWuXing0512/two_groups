@@ -6,6 +6,12 @@ export interface ILoginForm {
   imageCode?: string;
   current?: number;
   size?:number;
+  email?: string;
+  mobile?: string;
+  password?: string | number;
+  roleIdList?: Array<number|string>;
+  status?: number | string;
+  username?: string;
 }
 export interface IPropsUser {
   roleList: IUserList;
